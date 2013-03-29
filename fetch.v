@@ -31,11 +31,11 @@ wire [10:0] pc_siguiente;		//mux al pc
 wire [10:0] pc_actual;			//pc al sumador y pc a la memoria de inst
 wire [31:0] salida_mem;			//memoria de instrucciones al registro if/id
 
-mux u_mux (
-    .incremento(pc_incrementado), 
-    .salto(pc_salto), 
+mux u_mux_fetch (
+    .entrada_0(pc_incrementado), 
+    .entrada_1(pc_salto), 
     .sel(salto_sel), 
-    .value(pc_siguiente)
+    .salida(pc_siguiente)
     );
 
 pc u_pc (

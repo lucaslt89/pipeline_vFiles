@@ -20,6 +20,45 @@
 //////////////////////////////////////////////////////////////////////////////////
 module execute(
     input clock,
+	 input sel,
+    input [31:0] registro_1,
+    input [31:0] registro_2,
+	 input [31:0] sign_extend,
+	 input op,
+    output [31:0] result,
+    output [31:0] registro_2_out
+    );
+
+wire [31:0] salida_mux;
+wire [31:0] salida_alu;
+
+ex_mem_reg u_ex_mem_reg (
+    .result(salida_alu), 
+    .registro_2(registro_2), 
+    .clock(clock), 
+    .salida_result(result), 
+    .salida_registro_2(registro_2_out)
+	 );
+
+
+mux_ex u_mux_ex (
+    .entrada_0(registro_2), 
+    .entrada_1(sign_extend), 
+    .sel(sel), 
+    .salida(salida_mux)
+    );
+
+alu u_alu (
+    .operando_1(registro_1), 
+    .operando_2(salida_mux), 
+    .op(op), 
+    .result(salida_alu)
+    );
+
+endmodule
+
+/*
+    input clock,
     input wb_entrada,//2bits
     input m_entrada,//3bits
     input [31:0] registro_1,
@@ -80,9 +119,5 @@ fowarding_unit u_fw_unit (
     .wb_mem(wb_mem), 
     .ex_out(ex_out), 
     .mem_out(mem_out)
-    );
+    );*/
 
-
-
-
-endmodule

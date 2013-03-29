@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    02:06:11 02/25/2013 
+// Create Date:    17:44:43 03/29/2013 
 // Design Name: 
-// Module Name:    write_back 
+// Module Name:    mux_ex 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,25 +18,26 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module write_back(
-    input mem_to_reg,
-    input [31:0] mem_data,
-    input [31:0] ex_data,
-    output [31:0] wb_out
+
+module mux_ex(
+    input [31:0] entrada_0,
+    input [31:0] entrada_1,
+    input sel,
+    output [31:0] salida
     );
-
-	reg [31:0] aux;
 	 
-	always @(*)
-	begin
-		case (mem_to_reg)
+	 reg [31:0] aux;
+	 
+	 always @(*)
+	 begin
+		case (sel)
 		0:
-			aux = mem_data;
+			aux = entrada_0;
 		1:
-			aux = ex_data;		
+			aux = entrada_1;		
 		endcase
-	end
+	 end
 
-	assign wb_out = aux;
+assign salida = aux;
 
 endmodule

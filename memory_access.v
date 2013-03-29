@@ -19,7 +19,35 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module memory_access(
-    input mem_write,
+	 input clock,
+    input [10:0] address, 
+	 input [31:0] in_data,
+	 input write,
+    output [31:0] read_data,
+    output [10:0] address_out
+    );
+	 
+wire [31:0] mem_out;
+	 
+data_mem u_data_mem (
+    .clock(clock), 
+    .address(address), 
+    .in_data(in_data),
+	 .write(write),
+    .out_data(mem_out)
+    );
+
+mem_wb_reg u_mem_wb_reg(
+    .mem_data(mem_out), 
+    .address(address), 
+    .clock(clock), 
+    .salida_mem(read_data), 
+    .salida_addr(address_out)
+    );
+	 
+endmodule
+
+ /*   input mem_write,
     input mem_read,
     input wb_entrada,
     output wb_salida,
@@ -52,5 +80,4 @@ mem_wb_reg u_mem_wb_reg(
     .wb_salida(wb_salida), 
     .salida(mem_data)
     );
-	 
-endmodule
+*/

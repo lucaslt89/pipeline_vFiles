@@ -21,16 +21,16 @@
 module data_mem(
     input clock,
     input [10:0] address,
-    output [32:0] out_data,
-    input [32:0] in_data,
+	 input [31:0] in_data,
 	 input write,
-    input read //hace falta usarla?
+	 output [31:0] out_data
     );
 	 
 	
 	integer i;
-	reg [32:0] memoria [0:2047];
-	reg [32:0] aux;
+	reg [31:0] memoria [0:2047];
+	reg [31:0] aux;
+	
 	initial
 	begin
 		for (i = 0; i < 2048; i=i+1)

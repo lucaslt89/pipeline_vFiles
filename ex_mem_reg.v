@@ -19,16 +19,29 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module ex_mem_reg(
-    input wb_entrada,
-    input m_entrada,
-	 output wb_salida,
+	 input [31:0] result,
+	 input [31:0] registro_2, 
 	 input clock,
-    input [32:0] resultado,
-    input [32:0] dato_1,
-    input [32:0] dato_2,
-    output [32:0] salida
-    );
-
+	 output [31:0] salida_result,
+	 output [31:0] salida_registro_2
+	 );
+	
+	reg  [31:0] out_res;
+	reg  [31:0] out_reg;
+	
+	always @(posedge clock)
+	begin
+		out_res = result;
+	end
+	
+	
+	always @(posedge clock)
+	begin
+		out_reg = registro_2;
+	end
+	
+	assign salida_result = out_res;
+	assign salida_registro_2 = out_reg;
 
 	
 endmodule

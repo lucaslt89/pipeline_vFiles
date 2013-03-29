@@ -19,10 +19,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module mux(
-    input [10:0] incremento,
-    input [10:0] salto,
+    input [10:0] entrada_0,
+    input [10:0] entrada_1,
     input sel,
-    output [10:0] value
+    output [10:0] salida
     );
 	 
 	 reg [10:0] aux;
@@ -31,12 +31,12 @@ module mux(
 	 begin
 		case (sel)
 		0:
-			aux = incremento;
+			aux = entrada_0;
 		1:
-			aux = salto;		
+			aux = entrada_1;		
 		endcase
 	 end
 
-assign value = aux;
+assign salida = aux;
 
 endmodule

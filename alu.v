@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    02:06:11 02/25/2013 
+// Create Date:    17:32:10 03/29/2013 
 // Design Name: 
-// Module Name:    write_back 
+// Module Name:    alu 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,25 +18,23 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module write_back(
-    input mem_to_reg,
-    input [31:0] mem_data,
-    input [31:0] ex_data,
-    output [31:0] wb_out
+module alu(
+    input [31:0] operando_1,
+    input [31:0] operando_2,
+	 input op,
+    output reg[31:0] result
     );
-
-	reg [31:0] aux;
-	 
-	always @(*)
+	
+	always @*
 	begin
-		case (mem_to_reg)
-		0:
-			aux = mem_data;
-		1:
-			aux = ex_data;		
+		case(op)
+			0:
+			result <= operando_1 + operando_2;
+			1:
+			result <= operando_1 - operando_2;
 		endcase
 	end
 
-	assign wb_out = aux;
+
 
 endmodule
