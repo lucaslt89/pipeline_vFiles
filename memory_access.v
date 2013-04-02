@@ -20,30 +20,39 @@
 //////////////////////////////////////////////////////////////////////////////////
 module memory_access(
 	 input clock,
-    input [10:0] address, 
+	 input MemWrite,
+	 input Branch,
+	 input zero_signal,
+    input [31:0] alu_result, 
 	 input [31:0] in_data,
-	 input write,
-    output [31:0] read_data,
-    output [10:0] address_out
+	 input [4:0] reg_dest,
+    output [31:0] read_data_out,
+    output [31:0] alu_result_out,
+	 output [4:0] reg_dest_out,
+	 output PCSrc
     );
 	 
 wire [31:0] mem_out;
 	 
 data_mem u_data_mem (
     .clock(clock), 
-    .address(address), 
-    .in_data(in_data),
-	 .write(write),
+    .address(alu_result[10:0]), 
+    .in_data(in_data), 
+    .MemWrite(MemWrite), 
     .out_data(mem_out)
     );
 
-mem_wb_reg u_mem_wb_reg(
-    .mem_data(mem_out), 
-    .address(address), 
+mem_wb_reg u_mem_wb_reg (
+    .mem_data_in(mem_out), 
+    .alu_result_in(alu_result), 
+    .reg_dest_in(reg_dest), 
     .clock(clock), 
-    .salida_mem(read_data), 
-    .salida_addr(address_out)
+    .mem_data_out(read_data_out), 
+    .alu_result_out(alu_result_out), 
+    .reg_dest_out(reg_dest_out)
     );
+	 
+	 assign PCSrc = Branch & zero_signal;
 	 
 endmodule
 

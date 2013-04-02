@@ -29,9 +29,6 @@ module sign_extend(
 			sign_extended = immediate & 32'b00000000_00000000_11111111_11111111;
 		else
 			sign_extended = immediate | 32'b11111111_11111111_00000000_00000000;
-		
-		//Si vamos a trabajar con desplazamientos de 1 en el PC, tengo que volar esta linea.
-		sign_extended = sign_extended * 1;
 	end
 
 endmodule

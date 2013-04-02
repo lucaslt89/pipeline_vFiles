@@ -22,15 +22,15 @@ module data_mem(
     input clock,
     input [10:0] address,
 	 input [31:0] in_data,
-	 input write,
+	 input MemWrite,
 	 output [31:0] out_data
     );
 	 
-	
 	integer i;
 	reg [31:0] memoria [0:2047];
 	reg [31:0] aux;
 	
+	//Inicializo la memoria en 0
 	initial
 	begin
 		for (i = 0; i < 2048; i=i+1)
@@ -39,7 +39,7 @@ module data_mem(
 	
 	always@(posedge clock)
 	begin
-		if(write)
+		if(MemWrite)
 			memoria[address] = in_data;
 		else
 			aux = memoria[address];

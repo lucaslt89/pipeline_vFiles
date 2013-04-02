@@ -21,7 +21,7 @@
 module instruction_fetch(
     input [10:0] pc_salto, 	//dirección del salto
     input clock,
-	 input salto_sel, 			//selector del mux
+	 input PCSrc, 			//selector del mux
     output [10:0] pc, 
     output [31:0] instruccion
     );
@@ -34,7 +34,7 @@ wire [31:0] salida_mem;			//memoria de instrucciones al registro if/id
 mux u_mux_fetch (
     .entrada_0(pc_incrementado), 
     .entrada_1(pc_salto), 
-    .sel(salto_sel), 
+    .sel(PCSrc), 
     .salida(pc_siguiente)
     );
 

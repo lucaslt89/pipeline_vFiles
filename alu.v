@@ -22,7 +22,8 @@ module alu(
     input [31:0] operando_1,
     input [31:0] operando_2,
 	 input op,
-    output reg[31:0] result
+    output reg [31:0] result,
+	 output reg zero_signal
     );
 	
 	always @*
@@ -33,6 +34,13 @@ module alu(
 			1:
 			result <= operando_1 - operando_2;
 		endcase
+		
+		if(result == 0) begin
+			zero_signal = 1;
+		end
+		else begin
+			zero_signal = 0;
+		end
 	end
 
 

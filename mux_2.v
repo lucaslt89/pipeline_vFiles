@@ -19,13 +19,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module mux_ex(
-    input [32:0] entrada_0,
-    input [32:0] entrada_1,
+    input [31:0] entrada_0,
+    input [31:0] entrada_1,
     input sel,
-    input [32:0] value
+    output [31:0] value
     );
 	 
- 	 reg [10:0] aux;
+ 	 reg [31:0] aux;
 	 
 	 always @(*)
 	 begin

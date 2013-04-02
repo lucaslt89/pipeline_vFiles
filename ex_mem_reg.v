@@ -19,29 +19,38 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module ex_mem_reg(
-	 input [31:0] result,
-	 input [31:0] registro_2, 
+	 input [31:0] result_in,
+	 input [31:0] registro_2_in,
+	 input [10:0] jump_dest_addr_in,
+	 input zero_signal_in,
+	 input [4:0] reg_dest_in,
 	 input clock,
-	 output [31:0] salida_result,
-	 output [31:0] salida_registro_2
+	 output [31:0] result_out,
+	 output [31:0] registro_2_out,
+	 output [10:0] jump_dest_addr_out,
+	 output zero_signal_out,
+	 output [4:0] reg_dest_out
 	 );
 	
 	reg  [31:0] out_res;
 	reg  [31:0] out_reg;
+	reg  [10:0] out_dest_addr;
+	reg         out_zero_signal;
+	reg  [4:0]  out_reg_dest;
 	
 	always @(posedge clock)
 	begin
-		out_res = result;
+		out_res = result_in;
+		out_reg = registro_2_in;
+		out_dest_addr = jump_dest_addr_in;
+		out_zero_signal = zero_signal_in;
+		out_reg_dest = reg_dest_in;
 	end
 	
-	
-	always @(posedge clock)
-	begin
-		out_reg = registro_2;
-	end
-	
-	assign salida_result = out_res;
-	assign salida_registro_2 = out_reg;
+	assign result_out = out_res;
+	assign registro_2_out = out_reg;
+	assign jump_dest_addr_out = out_dest_addr;
+	assign zero_signal_out = out_zero_signal;
+	assign reg_dest_out = out_reg_dest;
 
-	
 endmodule

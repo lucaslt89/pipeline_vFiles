@@ -24,7 +24,7 @@ module pc(
 	 output [10:0] salida
 	 );
 	 
-	reg [10:0] pc_aux = 10'b00000_00000;
+	reg [10:0] pc_aux = 11'b000000_00000;
 	
 	always @(posedge clock)
 	begin

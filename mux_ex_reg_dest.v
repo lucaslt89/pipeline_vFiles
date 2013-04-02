@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    02:06:11 02/25/2013 
+// Create Date:    19:53:42 04/01/2013 
 // Design Name: 
-// Module Name:    write_back 
+// Module Name:    mux_ex_reg_dest 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,25 +18,21 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module write_back(
-    input MemToReg,
-    input [31:0] mem_data,
-    input [31:0] ex_data,
-    output [31:0] wb_out
+module mux_ex_reg_dest(
+    input [4:0] reg_dest_r_type,
+    input [4:0] reg_dest_l_type,
+    input selector,
+    output reg [4:0] reg_dest_selected
     );
 
-	reg [31:0] aux;
-	 
-	always @(*)
-	begin
-		case (MemToReg)
-		0:
-			aux = mem_data;
-		1:
-			aux = ex_data;		
-		endcase
-	end
-
-	assign wb_out = aux;
+	 always @*
+	 begin
+		 case (selector)
+			0:
+				reg_dest_selected = reg_dest_l_type;
+			1:
+				reg_dest_selected = reg_dest_r_type;
+			endcase
+	 end
 
 endmodule

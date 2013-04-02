@@ -4,10 +4,10 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   17:57:07 03/29/2013
+// Create Date:   21:08:38 03/31/2013
 // Design Name:   instruction_decode
-// Module Name:   D:/Practicos Arquitectura/Pipeline/insruction_decode_test.v
-// Project Name:  TrabajoFinal
+// Module Name:   D:/Practicos Arquitectura/Pipeline/instruction_decode_test.v
+// Project Name:  Pipeline
 // Target Device:  
 // Tool versions:  
 // Description: 
@@ -22,12 +22,13 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-module insruction_decode_test;
+module instruction_decode_test;
 
 	// Inputs
 	reg [31:0] instruction;
 	reg [10:0] current_pc;
 	reg [31:0] write_back_data;
+	reg [4:0] write_back_address;
 	reg reg_write;
 	reg clock;
 
@@ -36,20 +37,25 @@ module insruction_decode_test;
 	wire [31:0] data_a;
 	wire [31:0] data_b;
 	wire [31:0] sign_extended;
+	wire [4:0] reg_dest_r_type;
+	wire [4:0] reg_dest_l_type;
 
 	// Instantiate the Unit Under Test (UUT)
 	instruction_decode uut (
 		.instruction(instruction), 
 		.current_pc(current_pc), 
 		.write_back_data(write_back_data), 
+		.write_back_address(write_back_address), 
 		.reg_write(reg_write), 
 		.clock(clock), 
 		.jump_dest_addr(jump_dest_addr), 
 		.data_a(data_a), 
 		.data_b(data_b), 
-		.sign_extended(sign_extended)
+		.sign_extended(sign_extended), 
+		.reg_dest_r_type(reg_dest_r_type), 
+		.reg_dest_l_type(reg_dest_l_type)
 	);
-
+	
 	always #1 clock = ~clock;
 
 	initial begin
@@ -57,13 +63,13 @@ module insruction_decode_test;
 		instruction = 0;
 		current_pc = 0;
 		write_back_data = 0;
+		write_back_address = 0;
 		reg_write = 0;
 		clock = 0;
 
 		// Wait 100 ns for global reset to finish
 		#100;
-		
-		//Escribo el valor 5 en el registro 0 y 10 en el registro 1.
+      //Escribo el valor 5 en el registro 0 y 10 en el registro 1.
 		reg_write = 1;
 		write_back_data = 5;
 		instruction = 32'b000000_00000_00000_00000_00000_000000;
@@ -71,6 +77,7 @@ module insruction_decode_test;
 		#2;
 		
 		write_back_data = 10;
+		write_back_address = 1;
 		instruction = 32'b000000_00000_00000_00001_00000_000000;
 		
 		#2;
@@ -84,7 +91,7 @@ module insruction_decode_test;
 		//Pruebo el cálculo de la destination address.
 		current_pc = 5;
 		instruction = 32'b000000_00000_00000_00000_00000_000001;
-        
+		
 		// Add stimulus here
 
 	end
