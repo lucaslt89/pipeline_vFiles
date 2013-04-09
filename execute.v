@@ -22,18 +22,31 @@ module execute(
     input clock,
 	 input ALUSrc,
 	 input RegDst,
-	 input ALUOp,
+	 input [1:0] ALUOp, // TODO: Cambiar esto por [1:0] ALUOp
     input [31:0] registro_1,
     input [31:0] registro_2,
 	 input [31:0] sign_extend,
 	 input [10:0] jump_dest_addr,
 	 input [4:0] reg_dest_r_type,
 	 input [4:0] reg_dest_l_type,
+	 //Control Signals Input
+	 input MemToReg_in,
+	 input RegWrite_in,
+	 input MemRead_in,
+	 input MemWrite_in,
+	 input Branch_in,
+	 
     output [31:0] result_out,
     output [31:0] registro_2_out,
 	 output [4:0] reg_dest_out,
 	 output [10:0] jump_dest_addr_out,
-	 output zero_signal_out
+	 output zero_signal_out,
+	 //Control Signals Output
+	 output MemToReg_out,
+	 output RegWrite_out,
+	 output MemRead_out,
+	 output MemWrite_out,
+	 output Branch_out
     );
 
 wire [31:0] salida_mux_alu;
@@ -52,7 +65,19 @@ ex_mem_reg u_ex_mem_reg (
     .registro_2_out(registro_2_out), 
     .jump_dest_addr_out(jump_dest_addr_out), 
     .zero_signal_out(zero_signal_out), 
-    .reg_dest_out(reg_dest_out)
+    .reg_dest_out(reg_dest_out),
+	 
+    .MemToReg_in(MemToReg_in), 
+    .RegWrite_in(RegWrite_in), 
+    .MemRead_in(MemRead_in), 
+    .MemWrite_in(MemWrite_in), 
+    .Branch_in(Branch_in), 
+    
+    .MemToReg_out(MemToReg_out), 
+    .RegWrite_out(RegWrite_out), 
+    .MemRead_out(MemRead_out), 
+    .MemWrite_out(MemWrite_out), 
+    .Branch_out(Branch_out)
     );
 
 mux_ex u_mux_ex (

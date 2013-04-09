@@ -23,9 +23,16 @@ module mem_wb_reg(
 	 input [31:0] alu_result_in,
 	 input [4:0] reg_dest_in,
 	 input clock,
+	 //Control Signals Input
+	 input MemToReg_in,
+	 input RegWrite_in,
+	 
 	 output reg [31:0] mem_data_out,
 	 output reg [31:0] alu_result_out,
-	 output reg [4:0] reg_dest_out
+	 output reg [4:0] reg_dest_out,
+	 //Control Signals Output
+	 output reg MemToReg_out,
+	 output reg RegWrite_out
 	 );
 	
 	always @(posedge clock)
@@ -33,6 +40,8 @@ module mem_wb_reg(
 		mem_data_out = mem_data_in;
 		alu_result_out = alu_result_in;
 		reg_dest_out = reg_dest_in;
+		MemToReg_out = MemToReg_in;
+		RegWrite_out = RegWrite_in;
 	end
 	
 endmodule

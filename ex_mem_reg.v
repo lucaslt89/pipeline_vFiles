@@ -25,11 +25,24 @@ module ex_mem_reg(
 	 input zero_signal_in,
 	 input [4:0] reg_dest_in,
 	 input clock,
+	 //Control Signals Input
+	 input MemToReg_in,
+	 input RegWrite_in,
+	 input MemRead_in,
+	 input MemWrite_in,
+	 input Branch_in,
+	 
 	 output [31:0] result_out,
 	 output [31:0] registro_2_out,
 	 output [10:0] jump_dest_addr_out,
 	 output zero_signal_out,
-	 output [4:0] reg_dest_out
+	 output [4:0] reg_dest_out,
+	 //Control Signals Output
+	 output reg MemToReg_out,
+	 output reg RegWrite_out,
+	 output reg MemRead_out,
+	 output reg MemWrite_out,
+	 output reg Branch_out
 	 );
 	
 	reg  [31:0] out_res;
@@ -45,6 +58,11 @@ module ex_mem_reg(
 		out_dest_addr = jump_dest_addr_in;
 		out_zero_signal = zero_signal_in;
 		out_reg_dest = reg_dest_in;
+		MemToReg_out = MemToReg_in;
+		RegWrite_out = RegWrite_in;
+		MemRead_out = MemRead_in;
+		MemWrite_out = MemWrite_in;
+		Branch_out = Branch_in;
 	end
 	
 	assign result_out = out_res;

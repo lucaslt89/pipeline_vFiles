@@ -23,6 +23,7 @@ module data_mem(
     input [10:0] address,
 	 input [31:0] in_data,
 	 input MemWrite,
+	 input MemRead,
 	 output [31:0] out_data
     );
 	 
@@ -37,11 +38,17 @@ module data_mem(
 			memoria[i] = 32'b00000_00000_00000_00000_00000_00000_00;
 	end
 	
+	//En la primera mitad del ciclo se escribe el dato en memoria
 	always@(posedge clock)
 	begin
 		if(MemWrite)
 			memoria[address] = in_data;
-		else
+	end
+	
+	//En la segunda mitad del ciclo se lee de la memoria.
+	always@(negedge clock)
+	begin
+		if(MemRead)
 			aux = memoria[address];
 	end
 	
