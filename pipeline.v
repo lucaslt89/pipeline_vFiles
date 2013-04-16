@@ -113,9 +113,9 @@ module pipeline(
 	 //Instanciación
 	 execute u_execute (
 		 .clock(clock), 
-		 .ALUSrc(ALUSrc_ID_Out), 
-		 .RegDst(RegDst_ID_Out), 
-		 .ALUOp(ALUOp_ID_Out), 
+		 .ALUSrc(ALUSrc_ID_out), 
+		 .RegDst(RegDst_ID_out), 
+		 .ALUOp(ALUOp_ID_out), 
 		 .registro_1(data_a_ID_out), 
 		 .registro_2(data_b_ID_out), 
 		 .sign_extend(sign_extended_ID_out), 

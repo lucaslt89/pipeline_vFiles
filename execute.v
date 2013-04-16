@@ -90,7 +90,7 @@ mux_ex u_mux_ex (
 alu u_alu (
     .operando_1(registro_1), 
     .operando_2(salida_mux_alu), 
-    .op(ALUOp), 
+    .op(ALUOp), //Agregar los 6 bits del Sign Extend para hacer la ALU control 
     .result(salida_alu),
 	 .zero_signal(zero_signal_from_alu)
     );
@@ -103,68 +103,3 @@ mux_ex_reg_dest u_mux_ex_reg_dest (
     );
 
 endmodule
-
-/*
-    input clock,
-    input wb_entrada,//2bits
-    input m_entrada,//3bits
-    input [31:0] registro_1,
-    input [31:0] registro_2,
-    input rs_fwu,//5
-    input rt_fwu,
-    input rt_mux,
-    input rd_mux,
-    input mem_wb_register_rd,
-    input wb,
-	 input alu_src,
-	 input alu_op,	 
-	 output branch,
-    output wb_salida,
-    output [31:0] salida,
-    output ex_mem_register_rd
-    );
-
-ex_mem_reg u_ex_mem_reg (
-    .wb(wb), 
-    .m(m), 
-    .resultado(resultado), 
-    .dato_1(dato_1), 
-    .dato_2(dato_2), 
-    .salida(salida)
-    );
-
-
-mux_ex u_mux_ex (
-    .entrada_0(entrada_0), 
-    .entrada_1(entrada_1), 
-    .sel(sel), 
-    .salida(salida)
-    );
-
-mux_ex_3 u_mux_ex_0 (
-    .register(register), 
-    .memory(memory), 
-    .execute_out(execute_out), 
-    .salida(salida), 
-    .sel(sel)
-    );
-	 
-	 
-mux_ex_3 u_mux_ex_1 (
-    .register(register), 
-    .memory(memory), 
-    .execute_out(execute_out), 
-    .salida(salida), 
-    .sel(sel)
-    );
-
-fowarding_unit u_fw_unit (
-    .clock(clock), 
-    .rs(rs), 
-    .rt(rt), 
-    .wb_ex(wb_ex), 
-    .wb_mem(wb_mem), 
-    .ex_out(ex_out), 
-    .mem_out(mem_out)
-    );*/
-
