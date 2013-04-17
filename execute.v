@@ -84,13 +84,14 @@ mux_ex u_mux_ex (
     .entrada_0(registro_2), 
     .entrada_1(sign_extend), 
     .sel(ALUSrc), 
-    .value(salida_mux_alu)
+    .salida(salida_mux_alu)
     );
 
 alu u_alu (
     .operando_1(registro_1), 
     .operando_2(salida_mux_alu), 
-    .op(ALUOp), //Agregar los 6 bits del Sign Extend para hacer la ALU control 
+    .ALUOp(ALUOp), 
+	 .operation(sign_extend[5:0]),
     .result(salida_alu),
 	 .zero_signal(zero_signal_from_alu)
     );
