@@ -53,7 +53,7 @@ module alu_test;
 		
 		// Wait 100 ns for global reset to finish
 		#100;
-      operando_1 = 2;
+      operando_1 = -2;
 		operando_2 = 3;
 		// Add stimulus here
 		ALUOp = 2'b00;

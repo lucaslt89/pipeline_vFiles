@@ -24,6 +24,7 @@ module registers(
     input [4:0] write_address,
     input [31:0]write_data,
     input reg_write, //0 to read, 1 to write.
+	 input clock,
     output [31:0] data_a,
     output [31:0] data_b
     );
@@ -32,7 +33,7 @@ module registers(
 	 reg [31:0] data_a_reg;
 	 reg [31:0] data_b_reg;
 	 
-	 always @*
+	 always @(posedge clock)
 	 begin
 		
 		if(reg_write)

@@ -22,7 +22,7 @@ module mux_ex(
     input [31:0] entrada_0,
     input [31:0] entrada_1,
     input sel,
-    output [31:0] value
+    output [31:0] salida
     );
 	 
  	 reg [31:0] aux;
@@ -37,7 +37,7 @@ module mux_ex(
 		endcase
 	 end
 
-assign value = aux;
+assign salida = aux;
 
 
 endmodule

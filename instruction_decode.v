@@ -81,7 +81,8 @@ module instruction_decode(
 		 .read_addr_b(instruction[20:16]),
 		 .write_address(write_back_address),
 		 .write_data(write_back_data), 
-		 .reg_write(RegWrite), 
+		 .reg_write(RegWrite),
+		 .clock(clock),
 		 .data_a(reg_data_a),
 		 .data_b(reg_data_b)
     );

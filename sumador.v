@@ -24,13 +24,13 @@ module sumador(
     output [10:0] pc_incrementado
     );
 	 
-	 reg [10:0] pc_aux;
+	 reg [11:0] pc_aux;
 	 
 	 always@(*)
 	 begin
 		 pc_aux = pc_actual + 1;
 	 end
 	 
-	 assign pc_incrementado = pc_aux;
+	 assign pc_incrementado = pc_aux[10:0];
 
 endmodule
