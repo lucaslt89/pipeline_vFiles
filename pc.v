@@ -34,10 +34,3 @@ module pc(
 	assign salida = pc_aux;
 
 endmodule
-
-    //input enable_pc,
-/*	always @(posedge clock)
-	begin
-		if(enable_pc)
-			pc_aux = siguiente_pc;
-	end*/
