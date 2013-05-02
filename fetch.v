@@ -23,16 +23,13 @@ module instruction_fetch(
     input clock,
 	 input PCSrc, 			//selector del mux
     output [10:0] pc, 
-    output [31:0] instruccion,
-	 output [10:0] current_pc_debug
+    output [31:0] instruccion
     );
 
 wire [10:0] pc_incrementado;	//sumador al pc y sumador al registro if/id
 wire [10:0] pc_siguiente;		//mux al pc
 wire [10:0] pc_actual;			//pc al sumador y pc a la memoria de inst
 wire [31:0] salida_mem;			//memoria de instrucciones al registro if/id
-
-	assign current_pc_debug = pc_siguiente;
 
 mux u_mux_fetch (
     .entrada_0(pc_incrementado), 
@@ -69,3 +66,25 @@ if_id_reg u_if_id_reg (
 
 	 
 endmodule
+
+/*
+    //input if_flush,
+	 //input pc_write,
+    //input if_id_write,
+
+pc u_pc (
+    .clock(clock), 
+    .siguiente_pc(pc_siguiente),
+	 .enable_pc(pc_write),
+    .pc_actual(pc_actual)
+    );
+
+	 
+if_id_reg u_if_id_reg (
+    .entrada(inst),
+	 .enable_if_id(if_id_write),
+	 .flush(if_flush),
+    .clock(clock), 
+    .salida(instruccion)
+    );
+*/

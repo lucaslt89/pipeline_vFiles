@@ -24,7 +24,7 @@ module sumador(
     output [10:0] pc_incrementado
     );
 	 
-	 reg [11:0] pc_aux;
+	 reg [11:0] pc_aux  = 0;
 	 
 	 always@(*)
 	 begin

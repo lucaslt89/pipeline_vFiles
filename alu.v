@@ -26,9 +26,14 @@ module alu(
     output reg [31:0] result,
 	 output reg zero_signal
     );
-	
-	reg [5:0]op;
 
+	initial
+	begin
+		result = 0;
+		zero_signal = 0;
+	end
+	
+	reg [5:0]op = 0;
 	
 	always@*
 	begin

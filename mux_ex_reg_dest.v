@@ -24,7 +24,12 @@ module mux_ex_reg_dest(
     input selector,
     output reg [4:0] reg_dest_selected
     );
-
+	
+	initial
+	begin
+		reg_dest_selected = 0;
+	end
+	
 	 always @*
 	 begin
 		 case (selector)

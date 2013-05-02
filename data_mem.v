@@ -29,7 +29,7 @@ module data_mem(
 	 
 	integer i;
 	reg [31:0] memoria [0:2047];
-	reg [31:0] aux;
+	reg [31:0] aux = 0;
 	
 	//Inicializo la memoria en 0
 	initial

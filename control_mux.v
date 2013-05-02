@@ -29,6 +29,18 @@ module control_mux(
 	 output reg Branch_out,
 	 output reg [1:0] ALUOp_out
     );
+	
+	initial
+	begin
+	 RegDst_out = 0;
+	 ALUSrc_out = 0;
+	 MemToReg_out = 0;
+	 RegWrite_out = 0;
+	 MemRead_out = 0;
+	 MemWrite_out = 0;
+	 Branch_out = 0;
+	 ALUOp_out = 0;
+	end
 		
 	always @*
 	begin
@@ -37,7 +49,7 @@ module control_mux(
 		6'b000000: begin
 							RegDst_out = 1;
 							ALUSrc_out = 0;
-							MemToReg_out = 0;
+							MemToReg_out = 1;
 							RegWrite_out = 1;
 							MemRead_out = 0;
 							MemWrite_out = 0;

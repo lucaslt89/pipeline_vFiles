@@ -24,7 +24,7 @@ module adder(
     output [10:0] new_pc
     );
 	
-	reg [31:0] aux;
+	reg [31:0] aux = 0;
 	
 	always @*
 	begin

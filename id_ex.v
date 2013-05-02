@@ -52,7 +52,26 @@ module id_ex(
 	 output reg Branch_out,
 	 output reg [1:0] ALUOp_out
     );
-
+	
+	initial
+	begin
+	 data_a_out = 0;
+    data_b_out = 0;
+	 sign_extend_out = 0;
+	 jump_dest_out = 0;
+	 reg_dest_r_type_out = 0;
+	 reg_dest_l_type_out = 0;
+	 RegDst_out = 0;
+	 ALUSrc_out = 0;
+	 MemToReg_out = 0;
+	 RegWrite_out = 0;
+	 MemRead_out = 0;
+	 MemWrite_out = 0;
+	 Branch_out = 0;
+	 ALUOp_out = 0;
+	end
+	
+	
 	always @(posedge clock)
 	begin
 		data_a_out = data_a_in;

@@ -25,7 +25,7 @@ module write_back(
     output [31:0] wb_out
     );
 
-	reg [31:0] aux;
+	reg [31:0] aux = 0;
 	 
 	always @(*)
 	begin

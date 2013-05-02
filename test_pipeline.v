@@ -31,7 +31,9 @@ module test_pipeline;
 	pipeline uut (
 		.clock(clock)
 	);
-
+	
+	always #5 clock = ~clock;
+	
 	initial begin
 		// Initialize Inputs
 		clock = 0;

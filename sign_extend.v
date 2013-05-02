@@ -22,6 +22,10 @@ module sign_extend(
     input [15:0] immediate,
     output reg [31:0] sign_extended
     );
+	initial
+	begin
+		sign_extended = 0;
+	end
 
 	always @*
 	begin

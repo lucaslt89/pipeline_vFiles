@@ -35,6 +35,15 @@ module mem_wb_reg(
 	 output reg RegWrite_out
 	 );
 	
+	initial
+	begin
+	 mem_data_out = 0;
+	 alu_result_out = 0;
+	 reg_dest_out = 0;
+	 MemToReg_out = 0;
+	 RegWrite_out = 0;
+	end
+	
 	always @(posedge clock)
 	begin
 		mem_data_out = mem_data_in;

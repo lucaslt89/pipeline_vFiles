@@ -45,11 +45,20 @@ module ex_mem_reg(
 	 output reg Branch_out
 	 );
 	
-	reg  [31:0] out_res;
-	reg  [31:0] out_reg;
-	reg  [10:0] out_dest_addr;
-	reg         out_zero_signal;
-	reg  [4:0]  out_reg_dest;
+	initial
+	begin
+	 MemToReg_out = 0;
+	 RegWrite_out = 0;
+	 MemRead_out = 0;
+	 MemWrite_out = 0;
+	 Branch_out = 0;
+	end
+	
+	reg  [31:0] out_res = 0;
+	reg  [31:0] out_reg = 0;
+	reg  [10:0] out_dest_addr = 0;
+	reg         out_zero_signal = 0;
+	reg  [4:0]  out_reg_dest = 0;
 	
 	always @(posedge clock)
 	begin

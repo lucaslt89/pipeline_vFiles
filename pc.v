@@ -34,3 +34,5 @@ module pc(
 	assign salida = pc_aux;
 
 endmodule
+
+    

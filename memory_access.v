@@ -68,5 +68,5 @@ mem_wb_reg u_mem_wb_reg (
     );
 	 
 	 assign PCSrc = Branch & zero_signal;
-	 
+	 //assign PCSrc = 0;
 endmodule

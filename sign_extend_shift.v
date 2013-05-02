@@ -23,6 +23,11 @@ module sign_extend_shift(
     output reg [31:0] sign_extend_shifted
     );
 	 
+	 initial
+	 begin
+		sign_extend_shifted = 0;
+	 end
+	 
 	 always @*
 	 begin
 		//Si vamos a trabajar con PC que cuente de a 4, cambiar el 1 por un 4.

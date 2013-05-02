@@ -25,7 +25,7 @@ module mux(
     output [10:0] salida
     );
 	 
-	 reg [10:0] aux;
+	 reg [10:0] aux  = 0;
 	 
 	 always @(*)
 	 begin
