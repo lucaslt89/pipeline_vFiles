@@ -31,9 +31,9 @@ module write_back(
 	begin
 		case (MemToReg)
 		0:
-			aux = mem_data;
+			aux = ex_data;
 		1:
-			aux = ex_data;		
+			aux = mem_data;		
 		endcase
 	end
 

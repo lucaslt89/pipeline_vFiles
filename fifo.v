@@ -4,7 +4,7 @@ module fifo
               W=4
   )
   (
-	 input wire clk,reset,rd,wr,
+	 input wire clk,rd,wr,
 	 input wire [B-1:0] w_data,
 	 output wire full, empty,
 	 output wire [B-1:0] r_data,
@@ -63,7 +63,7 @@ module fifo
 	 input Branch_id_out,
 	 input [1:0] ALUOp_id_out,
 	 
-	 //Debugging signals for IE
+	  //Debugging signals for IE
 	 input [31:0] result_ie_out,
 	 input [31:0] registro_2_ie_out,
 	 input [10:0] jump_dest_addr_ie_out,
@@ -76,7 +76,7 @@ module fifo
 	 input MemWrite_ie_out,
 	 input Branch_ie_out,
 	 
-	 //Debugging signals for MEM
+	  //Debugging signals for MEM
 	 input [31:0] mem_data_mem_out,
 	 input [31:0] alu_result_mem_out,
 	 input [4:0] reg_dest_mem_out,
@@ -326,28 +326,19 @@ module fifo
 			array_reg[181] = 8'b00011111 & reg_dest_mem_out;   //Registro destino saliendo del registro MEM/WB
 		
 			array_reg[182] = 8'b00000001 & MemToReg_mem_out; //Bit de control MemToReg que sale de la etapa MEM
-			array_reg[183] = 8'b00000001 & RegWrite_mem_out; //Bit de control RegWrite que sale de la etapa MEM 
+			array_reg[183] = 8'b00000001 & RegWrite_mem_out; //Bit de control RegWrite que sale de la etapa MEM
 	  end	
 
   assign r_data = array_reg[r_ptr_reg];
   assign wr_en = wr & ~full_reg;
 
-  always @(posedge clk, posedge reset)
-	  if(reset)
-		begin
-		  w_ptr_reg <= 0;
-		  r_ptr_reg <= 0;
-		  full_reg <= 1'b0;
-		  empty_reg <= 1'b1;
-		end
-	  
-	  else
-		begin
-		  w_ptr_reg <= w_ptr_next;
-		  r_ptr_reg <= r_ptr_next;
-		  full_reg <= full_next;
-		  empty_reg <= empty_next;
-		end
+  always @(posedge clk)
+	begin
+		w_ptr_reg <= w_ptr_next;
+		r_ptr_reg <= r_ptr_next;
+		full_reg <= full_next;
+		empty_reg <= empty_next;
+	end
 
   //Logica del proximo estado
   always @*

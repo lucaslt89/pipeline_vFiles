@@ -2,7 +2,6 @@ module mod_m_counter
   #(parameter N=4, M=10)
   (
 	  input clk,
-	  input reset,
 	  output max_tick,
 	  output [N-1:0] q
   );
@@ -10,11 +9,8 @@ module mod_m_counter
 	reg [N-1:0] r_reg;
 	wire [N-1:0] r_next;
 
-	always @ (posedge clk , posedge reset)
-		if (reset)
-			r_reg <= 0 ;
-		else
-			r_reg <= r_next;
+	always @ (posedge clk)
+		r_reg <= r_next;
 
 	assign r_next = (r_reg == (M-1)) ? 0 : r_reg + 1;
 	assign q = r_reg;

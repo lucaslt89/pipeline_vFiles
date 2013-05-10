@@ -4,10 +4,10 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   02:09:40 04/17/2013
+// Create Date:   20:21:23 05/09/2013
 // Design Name:   pipeline
-// Module Name:   D:/Facultad/Arquitectura de Computadoras/Pipeline/test_pipeline.v
-// Project Name:  Pipeline
+// Module Name:   D:/Practicos Arquitectura/PipelineFinal/pipeline_test.v
+// Project Name:  PipelineFinal
 // Target Device:  
 // Tool versions:  
 // Description: 
@@ -22,21 +22,34 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-module test_pipeline;
+module pipeline_test;
 
 	// Inputs
 	reg pipeline_clock;
+	reg rx;
+
+	// Outputs
+	wire tx;
+	wire [3:0] an;
+	wire [7:0] sseg;
+	wire [7:0] leds;
 
 	// Instantiate the Unit Under Test (UUT)
 	pipeline uut (
-		.pipeline_clock(pipeline_clock)
+		.pipeline_clock(pipeline_clock), 
+		.rx(rx), 
+		.tx(tx), 
+		.an(an), 
+		.sseg(sseg), 
+		.leds(leds)
 	);
 	
 	always #5 pipeline_clock = ~pipeline_clock;
-	
+
 	initial begin
 		// Initialize Inputs
 		pipeline_clock = 0;
+		rx = 0;
 
 		// Wait 100 ns for global reset to finish
 		#100;

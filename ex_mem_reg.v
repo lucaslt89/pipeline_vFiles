@@ -45,7 +45,7 @@ module ex_mem_reg(
 	 output reg Branch_out
 	 );
 	
-	initial
+		initial
 	begin
 	 MemToReg_out = 0;
 	 RegWrite_out = 0;
@@ -59,8 +59,9 @@ module ex_mem_reg(
 	reg  [10:0] out_dest_addr = 0;
 	reg         out_zero_signal = 0;
 	reg  [4:0]  out_reg_dest = 0;
+
 	
-	always @(posedge clock)
+	always @(negedge clock)
 	begin
 		out_res = result_in;
 		out_reg = registro_2_in;

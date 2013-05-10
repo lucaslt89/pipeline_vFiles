@@ -39,14 +39,14 @@ module data_mem(
 	end
 	
 	//En la primera mitad del ciclo se escribe el dato en memoria
-	always@(posedge clock)
+	always@(negedge clock)
 	begin
 		if(MemWrite)
 			memoria[address] = in_data;
 	end
 	
 	//En la segunda mitad del ciclo se lee de la memoria.
-	always@(negedge clock)
+	always@(posedge clock)
 	begin
 		if(MemRead)
 			aux = memoria[address];

@@ -8,10 +8,11 @@ module uart
               FIFO_W = 8            // Bits de direccion para las palabras en la FIFO en FIFO = 2^FIFO_W
   )
   (
-    input wire clk, reset,
+    input wire clk,
     input wire rx,
     output wire rx_empty, tx,
 	 output reg clock_status,
+	 output [7:0] rx_data_out_debug,
 	 
 	 //Debugging signals for IF
 	 input [10:0] current_pc,
@@ -94,14 +95,20 @@ module uart
   wire tx_empty, tx_fifo_not_empty;
   wire [7:0] tx_fifo_out, rx_data_out, fifo_data_rd;
   
-  // Cuerpo
-  
-  always @(posedge clk)
+  // Cuerpo  
+  always @(negedge clk)
   begin
-		if(rx_data_out == 8'b01110011)
-			clock_status = 1;
-		else
-			clock_status = 0;
+		//if(rx_done_tick == 1) begin
+			if(rx_data_out == 8'b01110011)
+			begin
+				clock_status = 1;
+			end
+			
+			else if (rx_data_out != 8'b01110011)
+			begin
+				clock_status = 0;
+			end
+		//end
   end
 	
 	//******** Baud Rate generator ********
@@ -111,7 +118,6 @@ module uart
   )
   baud_gen_unit(
 	.clk(clk),
-	.reset(reset),
 	.q(),
 	.max_tick(tick)
   );
@@ -124,7 +130,6 @@ module uart
   )
   uart_rx_unit(
 	.clk(clk),
-	.reset(reset),
 	.rx(rx),
 	.s_tick(tick),
 	.rx_done_tick(rx_done_tick),
@@ -139,7 +144,6 @@ module uart
 	)
 	fifo_rx_unit (
     .clk(clk), 
-    .reset(reset), 
     .rd(tx_done_tick), 
     .wr(rx_done_tick), 
     .w_data(rx_data_out), 
@@ -228,7 +232,6 @@ module uart
   )
   uart_tx_unit(
 	.clk(clk),
-	.reset(reset),
 	.tx_start(tx_fifo_not_empty || tx_done_tick),
 	.s_tick(tick),
 	.data_in(fifo_data_rd),
@@ -238,5 +241,7 @@ module uart
 	//*************************************
 	
 	assign tx_fifo_not_empty = ~rx_empty;
+	
+	assign rx_data_out_debug = rx_data_out;
   
 endmodule

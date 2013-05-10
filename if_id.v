@@ -29,14 +29,9 @@ module if_id_reg(
 	reg  [31:0] out_inst = 0;
 	reg  [10:0] out_pc = 0;
 	
-	always @(posedge clock)
+	always @(negedge clock)
 	begin
 		out_inst = instruccion;
-	end
-	
-	
-	always @(posedge clock)
-	begin
 		out_pc = pc;
 	end
 	

@@ -5,7 +5,6 @@ module uart_rx
   )
   (
     input clk,
-	 input reset,
     input rx,
 	 input s_tick,
     output reg rx_done_tick,
@@ -27,22 +26,13 @@ module uart_rx
   
   //Cuerpo
   //Registros de datos y de estado de la FSMD
-  always @(posedge clk, posedge reset)
-    if(reset)
-    begin
-      state_reg <= idle;
-      s_reg <= 0;
-      n_reg <= 0;
-      b_reg <= 0;
-    end
-    
-    else
-    begin
+  always @(posedge clk)
+  begin
       state_reg <= state_next;
       s_reg <= s_next;
       n_reg <= n_next;
       b_reg <= b_next;
-    end
+  end
       
   // FSMD next-state logic
   always @*

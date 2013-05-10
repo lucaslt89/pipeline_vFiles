@@ -44,7 +44,7 @@ module mem_wb_reg(
 	 RegWrite_out = 0;
 	end
 	
-	always @(posedge clock)
+	always @(negedge clock)
 	begin
 		mem_data_out = mem_data_in;
 		alu_result_out = alu_result_in;
@@ -54,24 +54,3 @@ module mem_wb_reg(
 	end
 	
 endmodule
-
-/*
-    input [32:0] entrada,
-    input clock,
-    input wb_entrada,
-    output wb_salida,
-    output [32:0] salida
-    );
-	
-	reg  [32:0] out;
-	reg wb;
-	
-	always @(posedge clock)
-	begin
-		out = entrada;
-		wb = wb_entrada;
-	end
-	
-	assign salida = out;
-	assign wb_salida = wb;
-*/

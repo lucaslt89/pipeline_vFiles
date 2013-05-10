@@ -52,7 +52,7 @@ module id_ex(
 	 output reg Branch_out,
 	 output reg [1:0] ALUOp_out
     );
-	
+	 
 	initial
 	begin
 	 data_a_out = 0;
@@ -70,9 +70,9 @@ module id_ex(
 	 Branch_out = 0;
 	 ALUOp_out = 0;
 	end
-	
-	
-	always @(posedge clock)
+
+
+	always @(negedge clock)
 	begin
 		data_a_out = data_a_in;
 		data_b_out = data_b_in;

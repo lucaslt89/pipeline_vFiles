@@ -28,13 +28,13 @@ module inst_mem(
 	
 	integer i;
 	reg [31:0] memoria [0:2047];
-	reg [31:0] aux  = 0;
+	reg [31:0] aux = 0;
 	
 	initial
 	begin
-		memoria[0] = 32'b00000000_00000001_00011000_00100001; 	
+		memoria[0] = 32'b000000_00000_00001_00011_00000_100001; 	//ADD r3, r0, r1
 		for (i = 1; i < 2048; i=i+1)
-			memoria[i] = 32'b00000_00000_00000_00000_00000_00000_00;
+			memoria[i] = 32'b00000000_00000000_00000000_00000000;
 	end
 	
 	always@(posedge clock)
