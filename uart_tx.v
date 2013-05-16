@@ -18,12 +18,14 @@ module uart_tx
       data  = 2'b10,
       stop  = 2'b11;
       
-  //Declaración de señales
+  //Declaracion de señales
   reg [1:0] state_reg, state_next;
-  reg [3:0] s_reg, s_next; //Número de sampling ticks para hacer el oversampling
-  reg [2:0] n_reg, n_next; //Número de bits de datos recibidos en el estado data.
+  reg [3:0] s_reg, s_next; //Numero de sampling ticks para hacer el oversampling
+  reg [2:0] n_reg, n_next; //Numero de bits de datos recibidos en el estado data.
   reg [7:0] b_reg, b_next;
   reg tx_reg, tx_next;     //Buffer de un bit para filtrar posibles fallos
+  reg [4:0] auxs;
+  reg [3:0] auxn;
   
   //Cuerpo
   //Registros de datos y Estado de la FSMD
@@ -70,7 +72,10 @@ module uart_tx
           end
           
           else
-            s_next = s_reg + 1;
+			 begin
+            auxs = s_reg +1;
+				s_next = auxs[3:0];
+			 end
       end
       
       data:
@@ -84,11 +89,17 @@ module uart_tx
             if(n_reg == (DBIT - 1))
               state_next = stop;
             else
-              n_next = n_reg + 1;
+            begin
+					auxn = n_reg + 1;
+					n_next = auxn[2:0];
+				end
           end
           
           else
-            s_next = s_reg + 1;
+			 begin
+            auxs = s_reg +1;
+				s_next = auxs[3:0];
+			 end
       end     
             
       stop:
@@ -102,7 +113,10 @@ module uart_tx
           end
           
           else
-            s_next = s_reg + 1;
+			 begin
+            auxs = s_reg +1;
+				s_next = auxs[3:0];
+			 end
       end
       
     endcase

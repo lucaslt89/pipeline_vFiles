@@ -11,7 +11,7 @@ module uart_rx
     output [7:0] dout
   );
   
-  //Declaración de estados simbólicos
+  //Declaracion de estados simbólicos
   localparam [1:0]
       idle  = 2'b00,
       start = 2'b01,
@@ -20,9 +20,11 @@ module uart_rx
       
   //Declaración de señales
   reg [1:0] state_reg, state_next;
-  reg [3:0] s_reg, s_next; //Número de sampling ticks para hacer el oversampling
-  reg [2:0] n_reg, n_next; //Número de bits de datos recibidos en el estado data.
+  reg [3:0] s_reg, s_next; //Numero de sampling ticks para hacer el oversampling
+  reg [2:0] n_reg, n_next; //Numero de bits de datos recibidos en el estado data.
   reg [7:0] b_reg, b_next; //Byte recibido.
+  reg [4:0] auxs;				//Auxiliar para truncar
+  reg [3:0] auxn;
   
   //Cuerpo
   //Registros de datos y de estado de la FSMD
@@ -61,8 +63,11 @@ module uart_rx
           end
           
           else
-            s_next = s_reg + 1;
-      
+			 begin
+            auxs = s_reg +1;
+				s_next = auxs[3:0];
+			 end
+		
       data:
         if(s_tick)
           if(s_reg == 15)
@@ -72,11 +77,17 @@ module uart_rx
             if(n_reg == (DBIT - 1))
               state_next = stop;
             else
-              n_next = n_reg + 1;
-          end
+            begin
+					auxn = n_reg + 1;
+					n_next = auxn[2:0];
+				end
+			 end
           
           else
-            s_next = s_reg + 1;
+			 begin
+            auxs = s_reg +1;
+				s_next = auxs[3:0];
+			 end
             
       stop:
         if(s_tick)
@@ -87,7 +98,10 @@ module uart_rx
           end
           
           else
-            s_next = s_reg + 1;
+			 begin
+            auxs = s_reg +1;
+				s_next = auxs[3:0];
+			 end
     endcase
   end
   

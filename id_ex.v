@@ -23,8 +23,9 @@ module id_ex(
     input [31:0] data_b_in,
 	 input [31:0] sign_extend_in,
 	 input [10:0] jump_dest_in,
-	 input [4:0] reg_dest_r_type_in,
-	 input [4:0] reg_dest_l_type_in,
+	 input [4:0] reg_dest_r_type_in,//rd
+	 input [4:0] reg_dest_l_type_in,//rt
+	 input [4:0] reg_dest_s_type_in,//rs
 	 input clock,
 	 //Control Signals Input
 	 input RegDst_in,
@@ -40,8 +41,10 @@ module id_ex(
     output reg [31:0] data_b_out,
 	 output reg [31:0] sign_extend_out,
 	 output reg [10:0] jump_dest_out,
-	 output reg [4:0] reg_dest_r_type_out,
-	 output reg [4:0] reg_dest_l_type_out,
+	 output reg [4:0] reg_dest_r_type_out,//rd
+	 output reg [4:0] reg_dest_l_type_out,//rt
+	 output reg [4:0] reg_dest_s_type_out,//rs
+	 
 	 //Control Signals Output
 	 output reg RegDst_out,
 	 output reg ALUSrc_out,
@@ -51,6 +54,8 @@ module id_ex(
 	 output reg MemWrite_out,
 	 output reg Branch_out,
 	 output reg [1:0] ALUOp_out
+	 
+
     );
 	 
 	initial
@@ -61,6 +66,7 @@ module id_ex(
 	 jump_dest_out = 0;
 	 reg_dest_r_type_out = 0;
 	 reg_dest_l_type_out = 0;
+	 reg_dest_s_type_out = 0;
 	 RegDst_out = 0;
 	 ALUSrc_out = 0;
 	 MemToReg_out = 0;
@@ -80,6 +86,7 @@ module id_ex(
 		jump_dest_out = jump_dest_in;
 		reg_dest_r_type_out = reg_dest_r_type_in;
 		reg_dest_l_type_out = reg_dest_l_type_in;
+		reg_dest_s_type_out = reg_dest_s_type_in;
 		RegDst_out = RegDst_in;
 		ALUSrc_out = ALUSrc_in;
 		MemToReg_out = MemToReg_in;
@@ -88,6 +95,7 @@ module id_ex(
 		MemWrite_out = MemWrite_in;
 		Branch_out = Branch_in;
 		ALUOp_out = ALUOp_in;
+		
 	end
 
 endmodule

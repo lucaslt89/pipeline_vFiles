@@ -22,19 +22,24 @@ module execute(
     input clock,
 	 input ALUSrc,
 	 input RegDst,
-	 input [1:0] ALUOp, // TODO: Cambiar esto por [1:0] ALUOp
+	 input [1:0] ALUOp,
     input [31:0] registro_1,
     input [31:0] registro_2,
 	 input [31:0] sign_extend,
 	 input [10:0] jump_dest_addr,
 	 input [4:0] reg_dest_r_type,
 	 input [4:0] reg_dest_l_type,
+	 //Forwarding Unit Input & mux_3
+	 input[1:0]ForwardA,
+	 input[1:0]ForwardB,
+	 input[31:0]memory_mem_wb,
 	 //Control Signals Input
 	 input MemToReg_in,
 	 input RegWrite_in,
 	 input MemRead_in,
 	 input MemWrite_in,
 	 input Branch_in,
+
 	 
     output [31:0] result_out,
     output [31:0] registro_2_out,
@@ -47,12 +52,16 @@ module execute(
 	 output MemRead_out,
 	 output MemWrite_out,
 	 output Branch_out
-    );
 
-wire [31:0] salida_mux_alu;
+	 
+    );
+wire [31:0] mux_a_out, mux_b_out, salida_mux_alu;
 wire [31:0] salida_alu;
 wire zero_signal_from_alu; //Señal de zero proveniente de la ALU
 wire [4:0] reg_dest_wire;  //Registro destino seleccionado, que no es el mismo para instrucciones tipo r que l.
+wire [31:0] result_out_aux;
+
+assign result_out = result_out_aux;
 
 ex_mem_reg u_ex_mem_reg (
     .result_in(salida_alu), 
@@ -61,7 +70,7 @@ ex_mem_reg u_ex_mem_reg (
     .zero_signal_in(zero_signal_from_alu), 
     .reg_dest_in(reg_dest_wire), 
     .clock(clock),
-    .result_out(result_out),
+    .result_out(result_out_aux),
     .registro_2_out(registro_2_out), 
     .jump_dest_addr_out(jump_dest_addr_out), 
     .zero_signal_out(zero_signal_out), 
@@ -80,15 +89,31 @@ ex_mem_reg u_ex_mem_reg (
     .Branch_out(Branch_out)
     );
 
+mux_ex_3 u_mux_ex_3_A (
+    .register_id_ex(registro_1), 
+    .earlier_result_ex_mem(result_out_aux), 
+    .memory_mem_wb(memory_mem_wb), 
+    .sel(ForwardA), 
+    .value(mux_a_out)
+    );
+
+mux_ex_3 u_mux_ex_3_B (
+    .register_id_ex(registro_2), 
+    .earlier_result_ex_mem(result_out_aux), 
+    .memory_mem_wb(memory_mem_wb), 
+    .sel(ForwardB), 
+    .value(mux_b_out)
+    );
+	 
 mux_ex u_mux_ex (
-    .entrada_0(registro_2), 
+    .entrada_0(mux_b_out), 
     .entrada_1(sign_extend), 
     .sel(ALUSrc), 
     .salida(salida_mux_alu)
     );
-
+	 
 alu u_alu (
-    .operando_1(registro_1), 
+    .operando_1(mux_a_out), 
     .operando_2(salida_mux_alu), 
     .ALUOp(ALUOp), 
 	 .operation(sign_extend[5:0]),

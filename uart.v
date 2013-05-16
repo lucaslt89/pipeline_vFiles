@@ -1,11 +1,10 @@
 module uart
-  #(  // Configuración por defecto:
+  #(  // Configuracion por defecto:
       // 19,200 baudios, 8 bits de datos, 1 bit de stop, 2^2 FIFO
-    parameter DBIT = 8,        // Bits de datos
+    parameter DBIT = 8,      // Bits de datos
               SB_TICK = 16,  // Ticks para el bit de stop. 16/24/32 para 1/1,5/2 bits
-              DVSR = 326,        // DVSR para generar el Baudrate. DVSR = 50M/(16*baudrate)
-              DVSR_BIT = 9,     // Bits del DVSR
-              FIFO_W = 8            // Bits de direccion para las palabras en la FIFO en FIFO = 2^FIFO_W
+              DVSR = 326,    // DVSR para generar el Baudrate. DVSR = 50M/(16*baudrate)
+              DVSR_BIT = 9   // Bits del DVSR
   )
   (
     input wire clk,
@@ -15,8 +14,8 @@ module uart
 	 output [7:0] rx_data_out_debug,
 	 
 	 //Debugging signals for IF
-	 input [10:0] current_pc,
-	 input [10:0] pc_if_out,
+	 input [7:0] current_pc,
+	 input [7:0] pc_if_out,
 	 input [31:0] instruccion_if_out,
 	 
 	 //Debugging signals for ID
@@ -55,7 +54,7 @@ module uart
 	 input [31:0] data_a_id_out,
     input [31:0] data_b_id_out,
 	 input [31:0] sign_extend_id_out,
-	 input [10:0] jump_dest_id_out,
+	 input [7:0] jump_dest_id_out,
 	 input [4:0] reg_dest_r_type_id_out,
 	 input [4:0] reg_dest_l_type_id_out,
 	 //Control Signals Output
@@ -71,7 +70,7 @@ module uart
 	 //Debugging signals for IE
 	 input [31:0] result_ie_out,
 	 input [31:0] registro_2_ie_out,
-	 input [10:0] jump_dest_addr_ie_out,
+	 input [7:0] jump_dest_addr_ie_out,
 	 input zero_signal_ie_out,
 	 input [4:0] reg_dest_ie_out,
 	 //Control Signals Output
@@ -139,14 +138,12 @@ module uart
 
 	//*********** FIFO Receiver ***********
 	fifo #(
-	 .B(DBIT),
-	 .W(FIFO_W)
+	 .B(DBIT)
 	)
 	fifo_rx_unit (
     .clk(clk), 
     .rd(tx_done_tick), 
     .wr(rx_done_tick), 
-    .w_data(rx_data_out), 
     .full(), 
     .empty(rx_empty), 
     .r_data(fifo_data_rd),

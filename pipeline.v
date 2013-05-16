@@ -39,7 +39,7 @@ module pipeline(
 	 //Salidas
 	 wire [10:0] pc_IF_out;
 	 wire [31:0] instruccion_IF_out;
-	 wire [10:0] current_pc_debug;
+	 wire [7:0] current_pc_debug;
 
 	 //Instanciación
 	 instruction_fetch u_instruction_fetch (
@@ -66,6 +66,7 @@ module pipeline(
 	 wire [31:0] sign_extended_ID_out;
 	 wire [4:0] reg_dest_r_type_ID_out;
 	 wire [4:0] reg_dest_l_type_ID_out;
+	 wire [4:0] reg_dest_s_type_ID_out;
 	 
 	 //Control Signals Output
 	 wire RegDst_ID_out;
@@ -125,6 +126,7 @@ module pipeline(
 		 .sign_extended(sign_extended_ID_out), 
 		 .reg_dest_r_type(reg_dest_r_type_ID_out), 
 		 .reg_dest_l_type(reg_dest_l_type_ID_out),
+		 .reg_dest_s_type(reg_dest_s_type_ID_out),
 		 .RegDst_out(RegDst_ID_out), 
 		 .ALUSrc_out(ALUSrc_ID_out), 
 		 .MemToReg_out(MemToReg_ID_out), 
@@ -171,6 +173,8 @@ module pipeline(
 	 //************* EX *************
 	 //Entradas
 	 // +Las salidas de la etapa ID.
+	 wire [1:0] ForwardA;
+	 wire [1:0] ForwardB;
 	 
 	 //Salidas
 	 wire [31:0] result_EX_out;
@@ -196,7 +200,10 @@ module pipeline(
 		 .sign_extend(sign_extended_ID_out), 
 		 .jump_dest_addr(jump_dest_addr_ID_out), 
 		 .reg_dest_r_type(reg_dest_r_type_ID_out), 
-		 .reg_dest_l_type(reg_dest_l_type_ID_out), 
+		 .reg_dest_l_type(reg_dest_l_type_ID_out),
+		 .ForwardA(ForwardA),
+		 .ForwardB(ForwardB),		 
+		 .memory_mem_wb(write_back_data_ID_in),
 		 .MemToReg_in(MemToReg_ID_out), 
 		 .RegWrite_in(RegWrite_ID_out), 
 		 .MemRead_in(MemRead_ID_out), 
@@ -260,6 +267,24 @@ module pipeline(
     );
 	 //******************************
 	 
+	 //****** FORWARDING UNIT *******
+	 //Entradas
+	 //Salidas de la Forwarding Unit
+	 
+	 //Instanciación
+	 forwarding_unit u_forwarding_unit (
+    .EX_MEM_RegisterRd(reg_dest_EX_out), 
+    .MEM_WB_RegisterRd(write_back_address_ID_in), 
+    .EX_MEM_RegWrite(RegWrite_EX_out), 
+    .MEM_WB_RegWrite(RegWrite_ID_in), 
+    .ID_EX_RegisterRs(reg_dest_s_type_ID_out), 
+    .ID_EX_RegisterRt(reg_dest_l_type_ID_out), 
+    .ForwardA(ForwardA), 
+    .ForwardB(ForwardB)
+    );
+	 //******************************
+	 
+	 
 	 //********** Debug Unit ********
 	 //Entradas
 	 //Entradas de las etapas previas
@@ -277,7 +302,7 @@ module pipeline(
 		
 		//Debug signals for IF.
 		.current_pc(current_pc_debug),
-		.pc_if_out(pc_IF_out),
+		.pc_if_out(pc_IF_out[7:0]),
 		.instruccion_if_out(instruccion_IF_out),
 	 
 		//Debugging signals for ID
@@ -316,7 +341,7 @@ module pipeline(
 		.data_a_id_out(data_a_ID_out), 
 		.data_b_id_out(data_b_ID_out), 
 		.sign_extend_id_out(sign_extended_ID_out), 
-		.jump_dest_id_out(jump_dest_addr_ID_out), 
+		.jump_dest_id_out(jump_dest_addr_ID_out[7:0]), 
 		.reg_dest_r_type_id_out(reg_dest_r_type_ID_out), 
 		.reg_dest_l_type_id_out(reg_dest_l_type_ID_out), 
 		.RegDst_id_out(RegDst_ID_out), 
@@ -331,7 +356,7 @@ module pipeline(
 		//Debugging signals for IE
 		.result_ie_out(result_EX_out), 
 		.registro_2_ie_out(registro_2_EX_out), 
-		.jump_dest_addr_ie_out(pc_salto_IF_in), 
+		.jump_dest_addr_ie_out(pc_salto_IF_in[7:0]), 
 		.zero_signal_ie_out(zero_signal_EX_out), 
 		.reg_dest_ie_out(reg_dest_EX_out), 
 		.MemToReg_ie_out(MemToReg_EX_out), 

@@ -1,17 +1,15 @@
 module fifo
   #(
-    parameter B=8,
-              W=4
+    parameter B=8
   )
   (
 	 input wire clk,rd,wr,
-	 input wire [B-1:0] w_data,
 	 output wire full, empty,
 	 output wire [B-1:0] r_data,
 	  
 	  //Debugging signals for IF
-	 input [10:0] current_pc,
-	 input [10:0] pc_if_out,
+	 input [7:0] current_pc,
+	 input [7:0] pc_if_out,
 	 input [31:0] instruccion_if_out,
 	  
 	  //Debugging signals for ID
@@ -50,7 +48,7 @@ module fifo
 	 input [31:0] data_a_id_out,
     input [31:0] data_b_id_out,
 	 input [31:0] sign_extend_id_out,
-	 input [10:0] jump_dest_id_out,
+	 input [7:0] jump_dest_id_out,
 	 input [4:0] reg_dest_r_type_id_out,
 	 input [4:0] reg_dest_l_type_id_out,
 	 //Control Signals Output
@@ -66,7 +64,7 @@ module fifo
 	  //Debugging signals for IE
 	 input [31:0] result_ie_out,
 	 input [31:0] registro_2_ie_out,
-	 input [10:0] jump_dest_addr_ie_out,
+	 input [7:0] jump_dest_addr_ie_out,
 	 input zero_signal_ie_out,
 	 input [4:0] reg_dest_ie_out,
 	 //Control Signals Output
@@ -85,12 +83,13 @@ module fifo
 	 input RegWrite_mem_out
   );
 
-  reg [B-1:0] array_reg [2**W-1:0];
-  reg [W-1:0] w_ptr_reg, w_ptr_next, w_ptr_succ;
-  reg [W-1:0] r_ptr_reg, r_ptr_next, r_ptr_succ;
+  reg [B-1:0] array_reg [183:0];
+  reg [7:0] w_ptr_reg, w_ptr_next, w_ptr_succ;
+  reg [7:0] r_ptr_reg, r_ptr_next, r_ptr_succ;
   reg full_reg, empty_reg, full_next, empty_next;
   wire wr_en;
-
+  
+  
   //Banco de registros y memoria
   always @(posedge clk)
 	  if(wr_en && r_ptr_next != 3) begin
@@ -339,12 +338,15 @@ module fifo
 		full_reg <= full_next;
 		empty_reg <= empty_next;
 	end
-
+	
+	
+	reg [8:0] aux;
   //Logica del proximo estado
   always @*
   begin
 	  w_ptr_succ = w_ptr_reg;
-	  r_ptr_succ = r_ptr_reg + 1;
+	  aux = r_ptr_reg + 1;
+	  r_ptr_succ = aux [7:0];
 	  full_next = full_reg;
 	  empty_next = empty_reg;
 	  w_ptr_next = w_ptr_reg;
@@ -377,7 +379,7 @@ module fifo
 			  w_ptr_next = w_ptr_succ;
 			  r_ptr_next = r_ptr_succ;
 			end
-			
+
 	  endcase
   end
   

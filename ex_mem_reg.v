@@ -45,7 +45,7 @@ module ex_mem_reg(
 	 output reg Branch_out
 	 );
 	
-		initial
+	initial
 	begin
 	 MemToReg_out = 0;
 	 RegWrite_out = 0;

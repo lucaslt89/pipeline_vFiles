@@ -30,8 +30,9 @@ module instruction_decode(
     output [31:0] data_a,
     output [31:0] data_b,
 	 output [31:0] sign_extended,
-	 output [4:0] reg_dest_r_type,
-	 output [4:0] reg_dest_l_type,
+	 output [4:0] reg_dest_r_type,//rd
+	 output [4:0] reg_dest_l_type,//rt
+	 output [4:0] reg_dest_s_type,//rs
 	 //Control Signals Output
 	 output RegDst_out,
 	 output ALUSrc_out,
@@ -41,6 +42,7 @@ module instruction_decode(
 	 output MemWrite_out,
 	 output Branch_out,
 	 output [1:0] ALUOp_out,
+	 
 	 
 	 //Registers to UART
 	 output [31:0] register_0_id_out,
@@ -175,15 +177,17 @@ module instruction_decode(
 		 .data_b_in(reg_data_b),
 		 .sign_extend_in(sign_extended_value),
 		 .jump_dest_in(jump_dest_addr_aux),
-		 .reg_dest_r_type_in(instruction[15:11]),
-		 .reg_dest_l_type_in(instruction[20:16]),
+		 .reg_dest_r_type_in(instruction[15:11]),//rd
+		 .reg_dest_l_type_in(instruction[20:16]),//rt
+		 .reg_dest_s_type_in(instruction[25:21]),//rs
 		 .clock(clock),
 		 .data_a_out(data_a),
 		 .data_b_out(data_b),
 		 .sign_extend_out(sign_extended),
 		 .jump_dest_out(jump_dest_addr),
-		 .reg_dest_r_type_out(reg_dest_r_type),
-		 .reg_dest_l_type_out(reg_dest_l_type),
+		 .reg_dest_r_type_out(reg_dest_r_type),//rd
+		 .reg_dest_l_type_out(reg_dest_l_type),//rt
+		 .reg_dest_s_type_out(reg_dest_s_type),//rs
 		  //Control Signals Input
 		 .RegDst_in(RegDst_in), 
 		 .ALUSrc_in(ALUSrc_in), 
