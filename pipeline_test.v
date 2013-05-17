@@ -4,10 +4,10 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   20:21:23 05/09/2013
+// Create Date:   08:45:59 05/17/2013
 // Design Name:   pipeline
-// Module Name:   D:/Practicos Arquitectura/PipelineFinal/pipeline_test.v
-// Project Name:  PipelineFinal
+// Module Name:   D:/Facultad/Arquitectura de Computadoras/Pipeline/pipeline_test.v
+// Project Name:  Pipeline
 // Target Device:  
 // Tool versions:  
 // Description: 
@@ -18,8 +18,9 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments:
-// 
+// Additional Comments: Para correr el test se debe cambiar el clock del pipeline por pipeline_clock, y comentar la declaracion del wire
+//								Comentar .status_clock(pipeline_clock) de la debug unit
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 module pipeline_test;
@@ -45,7 +46,7 @@ module pipeline_test;
 	);
 	
 	always #5 pipeline_clock = ~pipeline_clock;
-
+	
 	initial begin
 		// Initialize Inputs
 		pipeline_clock = 0;

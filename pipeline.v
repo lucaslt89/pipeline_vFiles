@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module pipeline(
-		input clock,
+		input pipeline_clock,
 		input rx,
 		output tx,
 		
@@ -29,7 +29,7 @@ module pipeline(
 		output [7:0] leds
     );
 	 
-	 wire pipeline_clock;
+	 //wire pipeline_clock;
 	 
 	 //************* IF *************
 	 //Entradas
@@ -297,7 +297,7 @@ module pipeline(
 		.rx(rx), 
 		.rx_empty(fifo_empty), 
 		.tx(tx), 
-		.clock_status(pipeline_clock),
+		//.clock_status(pipeline_clock),
 		.rx_data_out_debug(leds),
 		
 		//Debug signals for IF.

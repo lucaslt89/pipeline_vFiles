@@ -71,10 +71,12 @@ module registers(
 	 //Valores iniciales de los registros
 	 initial
 	 begin
-		registers[0] = 2;
-		registers[1] = 3;
-		for(i = 2; i < 32; i = i+1)
+		for(i = 0; i < 32; i = i+1)
 			registers[i] = 0;
+		registers[1] = 10;
+		registers[3] = 15;
+		registers [5] = -5;
+		registers [6] = 12;
 	 end
 	 
 	 always @(posedge clock)
@@ -84,12 +86,9 @@ module registers(
 		begin
 			registers[write_address] = write_data;
 		end
-		
-		else
-		begin
-			data_a_reg = registers[read_addr_a];
-			data_b_reg = registers[read_addr_b];
-		end
+
+		data_a_reg = registers[read_addr_a];
+		data_b_reg = registers[read_addr_b];
 		
 		//Register Outputs
 		register_0_id_out = registers[0];
