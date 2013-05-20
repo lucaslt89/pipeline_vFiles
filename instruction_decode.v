@@ -25,6 +25,7 @@ module instruction_decode(
 	 input [4:0] write_back_address,
 	 input RegWrite,
 	 input clock,
+	 input stall_mux,
 	 
     output [10:0] jump_dest_addr,
     output [31:0] data_a,
@@ -103,6 +104,7 @@ module instruction_decode(
 	 control_mux u_control_mux (
 		 .op_code(instruction[31:26]),
 		 .formato(instruction[5:0]),
+		 .stall_mux(stall_mux),
 		 .RegDst_out(RegDst_in), 
 		 .ALUSrc_out(ALUSrc_in), 
 		 .MemToReg_out(MemToReg_in), 

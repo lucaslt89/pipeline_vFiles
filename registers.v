@@ -75,9 +75,9 @@ module registers(
 			registers[i] = 0;
 		registers[1] = 10;
 		registers[3] = 15;
-		registers [5] = -5;
+		registers [5] = 15;
 		registers [6] = 12;
-		registers [15] = 11111;
+		registers [15] = 20;
 	 end
 	 
 	 always @(posedge clock)

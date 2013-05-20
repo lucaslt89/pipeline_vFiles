@@ -21,6 +21,7 @@
 module pc(
 	 input [10:0] entrada,
 	 input clock,
+	 input PCWrite,
 	 output [10:0] salida
 	 );
 	 
@@ -28,7 +29,10 @@ module pc(
 	
 	always @(posedge clock)
 	begin
+		if(PCWrite)
 			pc_aux = entrada;
+		else
+			pc_aux = pc_aux;
 	end
 	
 	assign salida = pc_aux;
