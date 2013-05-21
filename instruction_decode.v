@@ -33,6 +33,7 @@ module instruction_decode(
 	 output [4:0] reg_dest_r_type,//rd
 	 output [4:0] reg_dest_l_type,//rt
 	 output [4:0] reg_dest_s_type,//rs
+	 output [4:0] sa, //sa
 	 //Control Signals Output
 	 output RegDst_out,
 	 output ALUSrc_out,
@@ -180,6 +181,7 @@ module instruction_decode(
 		 .reg_dest_r_type_in(instruction[15:11]),//rd
 		 .reg_dest_l_type_in(instruction[20:16]),//rt
 		 .reg_dest_s_type_in(instruction[25:21]),//rs
+		 .sa_in(instruction[10:6]),
 		 .clock(clock),
 		 .data_a_out(data_a),
 		 .data_b_out(data_b),
@@ -188,6 +190,7 @@ module instruction_decode(
 		 .reg_dest_r_type_out(reg_dest_r_type),//rd
 		 .reg_dest_l_type_out(reg_dest_l_type),//rt
 		 .reg_dest_s_type_out(reg_dest_s_type),//rs
+		 .sa_out(sa),
 		  //Control Signals Input
 		 .RegDst_in(RegDst_in), 
 		 .ALUSrc_in(ALUSrc_in), 

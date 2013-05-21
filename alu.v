@@ -21,6 +21,7 @@
 module alu(
     input [31:0] operando_1,
     input [31:0] operando_2,
+	 input [4:0] sa,
 	 input [1:0]ALUOp,
 	 input [5:0]operation,
     output reg [31:0] result,
@@ -56,24 +57,23 @@ module alu(
 		case (op)
 			//SLL
 			6'b000000:
-				result <= operando_1 * 2**operando_2;
+				result <= operando_2 * 2**sa;
 						
 			//SRL
 			6'b000010:
-				result <= operando_1 / 2**operando_2;
+				result <= operando_2 / 2**sa;
 					
     		//SRA
 			6'b000011:
-				result <= $signed(operando_1) / 2**operando_2;
+				result <= $signed(operando_2) >>> sa;
 		
 			//SRLV
 			6'b000110:
-					result <= operando_1 / 2**operando_2;
+				result <= operando_2 >> operando_1;
 
 			//SRAV
 			6'b000111:
-				result <= $signed(operando_1) * 2**operando_2;
-
+				result <= $signed(operando_2) >>> operando_1;
 
 			//ADD
 			6'b100000:
@@ -81,7 +81,7 @@ module alu(
 						
 			//SLLV
 			6'b000100:
-				result <= operando_1 * 2** operando_2;
+				result <= operando_2 << operando_1;
 						
 			//SUB
 			6'b100010:

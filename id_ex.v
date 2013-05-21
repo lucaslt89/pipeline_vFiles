@@ -26,6 +26,7 @@ module id_ex(
 	 input [4:0] reg_dest_r_type_in,//rd
 	 input [4:0] reg_dest_l_type_in,//rt
 	 input [4:0] reg_dest_s_type_in,//rs
+	 input [4:0] sa_in, //sa
 	 input clock,
 	 //Control Signals Input
 	 input RegDst_in,
@@ -44,6 +45,7 @@ module id_ex(
 	 output reg [4:0] reg_dest_r_type_out,//rd
 	 output reg [4:0] reg_dest_l_type_out,//rt
 	 output reg [4:0] reg_dest_s_type_out,//rs
+	 output reg [4:0] sa_out, //sa
 	 
 	 //Control Signals Output
 	 output reg RegDst_out,
@@ -87,6 +89,7 @@ module id_ex(
 		reg_dest_r_type_out = reg_dest_r_type_in;
 		reg_dest_l_type_out = reg_dest_l_type_in;
 		reg_dest_s_type_out = reg_dest_s_type_in;
+		sa_out = sa_in;
 		RegDst_out = RegDst_in;
 		ALUSrc_out = ALUSrc_in;
 		MemToReg_out = MemToReg_in;
@@ -95,7 +98,6 @@ module id_ex(
 		MemWrite_out = MemWrite_in;
 		Branch_out = Branch_in;
 		ALUOp_out = ALUOp_in;
-		
 	end
 
 endmodule

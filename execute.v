@@ -29,6 +29,7 @@ module execute(
 	 input [10:0] jump_dest_addr,
 	 input [4:0] reg_dest_r_type,
 	 input [4:0] reg_dest_l_type,
+	 input [4:0] sa,
 	 //Forwarding Unit Input & mux_3
 	 input[1:0]ForwardA,
 	 input[1:0]ForwardB,
@@ -114,7 +115,8 @@ mux_ex u_mux_ex (
 	 
 alu u_alu (
     .operando_1(mux_a_out), 
-    .operando_2(salida_mux_alu), 
+    .operando_2(salida_mux_alu),
+	 .sa(sa),
     .ALUOp(ALUOp), 
 	 .operation(sign_extend[5:0]),
     .result(salida_alu),

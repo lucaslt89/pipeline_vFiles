@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module pipeline(
-		input pipeline_clock,
+		input clock,
 		input rx,
 		output tx,
 		
@@ -29,7 +29,7 @@ module pipeline(
 		output [7:0] leds
     );
 	 
-	 //wire pipeline_clock;
+	 wire pipeline_clock;
 	 
 	 //************* IF *************
 	 //Entradas
@@ -67,6 +67,7 @@ module pipeline(
 	 wire [4:0] reg_dest_r_type_ID_out;
 	 wire [4:0] reg_dest_l_type_ID_out;
 	 wire [4:0] reg_dest_s_type_ID_out;
+	 wire [4:0] sa_ID_out;
 	 
 	 //Control Signals Output
 	 wire RegDst_ID_out;
@@ -127,6 +128,7 @@ module pipeline(
 		 .reg_dest_r_type(reg_dest_r_type_ID_out), 
 		 .reg_dest_l_type(reg_dest_l_type_ID_out),
 		 .reg_dest_s_type(reg_dest_s_type_ID_out),
+		 .sa(sa_ID_out),
 		 .RegDst_out(RegDst_ID_out), 
 		 .ALUSrc_out(ALUSrc_ID_out), 
 		 .MemToReg_out(MemToReg_ID_out), 
@@ -201,6 +203,7 @@ module pipeline(
 		 .jump_dest_addr(jump_dest_addr_ID_out), 
 		 .reg_dest_r_type(reg_dest_r_type_ID_out), 
 		 .reg_dest_l_type(reg_dest_l_type_ID_out),
+		 .sa(sa_ID_out),
 		 .ForwardA(ForwardA),
 		 .ForwardB(ForwardB),		 
 		 .memory_mem_wb(write_back_data_ID_in),
@@ -297,7 +300,7 @@ module pipeline(
 		.rx(rx), 
 		.rx_empty(fifo_empty), 
 		.tx(tx), 
-		//.clock_status(pipeline_clock),
+		.clock_status(pipeline_clock),
 		.rx_data_out_debug(leds),
 		
 		//Debug signals for IF.
