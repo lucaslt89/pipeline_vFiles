@@ -35,6 +35,8 @@ module pipeline(
 	 //Entradas
 	 wire PCSrc_IF_in;
 	 wire [10:0] pc_salto_IF_in;
+	 wire PCWrite;
+	 wire IF_ID_Write;
 	 
 	 //Salidas
 	 wire [10:0] pc_IF_out;
@@ -45,7 +47,9 @@ module pipeline(
 	 instruction_fetch u_instruction_fetch (
 		 .pc_salto(pc_salto_IF_in), 
 		 .clock(pipeline_clock),
-		 .PCSrc(PCSrc_IF_in), 
+		 .PCSrc(PCSrc_IF_in),
+		 .PCWrite(PCWrite),
+		 .IF_ID_Write(IF_ID_Write),
 		 .pc(pc_IF_out), 
 		 .instruccion(instruccion_IF_out),
 		 .current_pc_debug(current_pc_debug)
@@ -57,6 +61,7 @@ module pipeline(
 	 wire RegWrite_ID_in;
 	 wire [31:0] write_back_data_ID_in;
 	 wire [4:0] write_back_address_ID_in;
+	 wire stall_mux;
 	 // +Salidas de la etapa IF.
 	 
 	 //Salidas
@@ -121,6 +126,7 @@ module pipeline(
 		 .write_back_address(write_back_address_ID_in), 
 		 .RegWrite(RegWrite_ID_in),
 		 .clock(pipeline_clock),
+		 .stall_mux(stall_mux),
 		 .jump_dest_addr(jump_dest_addr_ID_out), 
 		 .data_a(data_a_ID_out), 
 		 .data_b(data_b_ID_out), 
@@ -287,6 +293,22 @@ module pipeline(
     );
 	 //******************************
 	 
+	 //*** HAZARD DETECTION UNIT ****
+	 //Entradas
+	 //Salidas de la Forwarding Unit
+	 
+	 //Instanciación	 
+	 hazard_detection_unit u_hazard_detection_unit (
+    .ID_EX_MemRead(MemRead_ID_out),
+	 .ID_EX_RegisterRt(reg_dest_l_type_ID_out),
+	 .IF_ID_RegisterRt(instruccion_IF_out[20:16]),
+	 .IF_ID_RegisterRs(instruccion_IF_out[25:21]),
+    .PCWrite(PCWrite), 
+    .IF_ID_Write(IF_ID_Write), 
+    .stall_mux(stall_mux)
+    );
+	 //******************************
+	 
 	 
 	 //********** Debug Unit ********
 	 //Entradas
@@ -296,7 +318,7 @@ module pipeline(
 	 wire fifo_empty;
 	 
 	 uart debug_unit (
-		.clk(clock),
+		.clk(pipeline_clock),
 		.rx(rx), 
 		.rx_empty(fifo_empty), 
 		.tx(tx), 

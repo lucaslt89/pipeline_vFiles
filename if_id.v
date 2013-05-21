@@ -22,6 +22,7 @@ module if_id_reg(
     input [31:0] instruccion,
 	 input [10:0] pc,
 	 input clock,
+	 input IF_ID_Write,
 	 output [31:0] salida_inst,
 	 output [10:0] salida_pc
 	 );
@@ -31,8 +32,9 @@ module if_id_reg(
 	
 	always @(negedge clock)
 	begin
-		out_inst = instruccion;
-		out_pc = pc;
+		if(IF_ID_Write)
+			out_inst = instruccion;
+			out_pc = pc;
 	end
 	
 	assign salida_inst = out_inst;
