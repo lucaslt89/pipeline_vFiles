@@ -75,18 +75,6 @@ module control_mux(
 					MemToReg_out = 0;
 				end
 				
-				else if(formato == 6'b000000) //Instrucción NOP
-				begin
-					RegDst_out = 0;
-					ALUOp_out = 2'b00;
-					ALUSrc_out = 0;
-					Branch_out = 0;
-					MemRead_out = 0;
-					MemWrite_out = 0;
-					RegWrite_out = 0;
-					MemToReg_out = 0;
-				end
-				
 				else //Alguna instrucción matemática, tipo R.
 				begin
 					RegDst_out = 1;
