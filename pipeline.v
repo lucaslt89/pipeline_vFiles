@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module pipeline(
-		input clock,
+		input pipeline_clock,
 		input rx,
 		output tx,
 		
@@ -29,7 +29,7 @@ module pipeline(
 		output [7:0] leds
     );
 	 
-	 wire pipeline_clock;
+	 //wire pipeline_clock;
 	 
 	 //************* IF *************
 	 //Entradas
@@ -83,6 +83,8 @@ module pipeline(
 	 wire MemWrite_ID_out;
 	 wire Branch_ID_out;
 	 wire [1:0] ALUOp_ID_out;
+	 wire [2:0] trunk_mode_ID_out;
+	 wire [5:0] op_code_ID_out;
 	 
 	 //Registros para la UART
 	 wire [31:0] register_0_id_out;
@@ -143,6 +145,8 @@ module pipeline(
 		 .MemWrite_out(MemWrite_ID_out), 
 		 .Branch_out(Branch_ID_out), 
 		 .ALUOp_out(ALUOp_ID_out),
+		 .trunk_mode_out(trunk_mode_ID_out),
+		 .op_code_out(op_code_ID_out),
 		 .register_0_id_out(register_0_id_out), 
 		 .register_1_id_out(register_1_id_out), 
 		 .register_2_id_out(register_2_id_out), 
@@ -196,13 +200,15 @@ module pipeline(
 	 wire MemRead_EX_out;
 	 wire MemWrite_EX_out;
 	 wire Branch_EX_out;
+	 wire [2:0] trunk_mode_EX_out;
 	 
 	 //Instanciación
 	 execute u_execute (
 		 .clock(pipeline_clock),
 		 .ALUSrc(ALUSrc_ID_out), 
 		 .RegDst(RegDst_ID_out), 
-		 .ALUOp(ALUOp_ID_out), 
+		 .ALUOp(ALUOp_ID_out),
+		 .op_code(op_code_ID_out),
 		 .registro_1(data_a_ID_out), 
 		 .registro_2(data_b_ID_out), 
 		 .sign_extend(sign_extended_ID_out), 
@@ -218,6 +224,7 @@ module pipeline(
 		 .MemRead_in(MemRead_ID_out), 
 		 .MemWrite_in(MemWrite_ID_out), 
 		 .Branch_in(Branch_ID_out),
+		 .trunk_mode_in(trunk_mode_ID_out),
 		 .result_out(result_EX_out), 
 		 .registro_2_out(registro_2_EX_out), 
 		 .reg_dest_out(reg_dest_EX_out), 
@@ -227,7 +234,8 @@ module pipeline(
 		 .RegWrite_out(RegWrite_EX_out), 
 		 .MemRead_out(MemRead_EX_out), 
 		 .MemWrite_out(MemWrite_EX_out), 
-		 .Branch_out(Branch_EX_out)
+		 .Branch_out(Branch_EX_out),
+		 .trunk_mode_out(trunk_mode_EX_out)
     );
 	 //******************************
 	 
@@ -247,7 +255,8 @@ module pipeline(
 		 .clock(pipeline_clock), 
 		 .MemWrite(MemWrite_EX_out),
 		 .MemRead(MemRead_EX_out), 		 
-		 .Branch(Branch_EX_out), 
+		 .Branch(Branch_EX_out),
+		 .trunk_mode(trunk_mode_EX_out),
 		 .zero_signal(zero_signal_EX_out), 
 		 .alu_result(result_EX_out), 
 		 .in_data(registro_2_EX_out), 
@@ -322,7 +331,7 @@ module pipeline(
 		.rx(rx), 
 		.rx_empty(fifo_empty), 
 		.tx(tx), 
-		.clock_status(pipeline_clock),
+		//.clock_status(pipeline_clock),
 		.rx_data_out_debug(leds),
 		
 		//Debug signals for IF.

@@ -23,6 +23,7 @@ module execute(
 	 input ALUSrc,
 	 input RegDst,
 	 input [1:0] ALUOp,
+	 input [5:0] op_code,
     input [31:0] registro_1,
     input [31:0] registro_2,
 	 input [31:0] sign_extend,
@@ -40,7 +41,7 @@ module execute(
 	 input MemRead_in,
 	 input MemWrite_in,
 	 input Branch_in,
-
+	 input [2:0] trunk_mode_in,
 	 
     output [31:0] result_out,
     output [31:0] registro_2_out,
@@ -52,8 +53,8 @@ module execute(
 	 output RegWrite_out,
 	 output MemRead_out,
 	 output MemWrite_out,
-	 output Branch_out
-
+	 output Branch_out,
+	 output [2:0] trunk_mode_out
 	 
     );
 wire [31:0] mux_a_out, mux_b_out, salida_mux_alu;
@@ -61,6 +62,16 @@ wire [31:0] salida_alu;
 wire zero_signal_from_alu; //Señal de zero proveniente de la ALU
 wire [4:0] reg_dest_wire;  //Registro destino seleccionado, que no es el mismo para instrucciones tipo r que l.
 wire [31:0] result_out_aux;
+
+reg [5:0] operation;
+
+	always @*
+	begin
+		if(ALUSrc == 1 && ALUOp == 2'b10)
+			operation = op_code;
+		else
+			operation = sign_extend[5:0];
+	end
 
 assign result_out = result_out_aux;
 
@@ -81,13 +92,15 @@ ex_mem_reg u_ex_mem_reg (
     .RegWrite_in(RegWrite_in), 
     .MemRead_in(MemRead_in), 
     .MemWrite_in(MemWrite_in), 
-    .Branch_in(Branch_in), 
+    .Branch_in(Branch_in),
+	 .trunk_mode_in(trunk_mode_in),
     
     .MemToReg_out(MemToReg_out), 
     .RegWrite_out(RegWrite_out), 
     .MemRead_out(MemRead_out), 
     .MemWrite_out(MemWrite_out), 
-    .Branch_out(Branch_out)
+    .Branch_out(Branch_out),
+	 .trunk_mode_out(trunk_mode_out)
     );
 
 mux_ex_3 u_mux_ex_3_A (
@@ -118,7 +131,7 @@ alu u_alu (
     .operando_2(salida_mux_alu),
 	 .sa(sa),
     .ALUOp(ALUOp), 
-	 .operation(sign_extend[5:0]),
+	 .operation(operation),
     .result(salida_alu),
 	 .zero_signal(zero_signal_from_alu)
     );

@@ -119,6 +119,38 @@ module alu(
 			6'b100111:
 				result <= ~(operando_1 | operando_2);
 				
+			//ADDI:
+			6'b001000:
+				result <= operando_1 + operando_2;
+				
+			//ADDIU:
+			6'b001001:
+				result <= operando_1 + operando_2;
+				
+			//ANDI:
+			6'b001100:
+				result <= operando_1 & (operando_2 & 32'b00000000_00000000_11111111_11111111);
+			
+			//ORI:
+			6'b001101:
+				result <= operando_1 | (operando_2 & 32'b00000000_00000000_11111111_11111111);
+				
+			//XORI:
+			6'b001110:
+				result <= operando_1 ^ (operando_2 & 32'b00000000_00000000_11111111_11111111);
+				
+			//LUI:
+			6'b001111:
+				result <= operando_2 << 16;
+				
+			//SLTI:
+			6'b001010:
+				result <= ($signed(operando_1) < $signed(operando_2)) ? 1 : 0;
+				
+			//SLTIU:
+			6'b001011:
+				result <= ($unsigned(operando_1) < $unsigned(operando_2)) ? 1 : 0;
+				
 /*			//JR //NO SE QUE MIERDA HACE LA ALU				
 			6'b001000:
 				result <= operando_1 - operando_2;

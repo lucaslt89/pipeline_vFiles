@@ -29,8 +29,15 @@ module control_mux(
 	 output reg MemRead_out,
 	 output reg MemWrite_out,
 	 output reg Branch_out,
-	 output reg [1:0] ALUOp_out
+	 output reg [1:0] ALUOp_out,
+	 output reg [2:0] trunk_mode_out
     );
+	 //Trunk mode:
+	 // 0 = Normal result
+	 // 1 = Byte with signed extension
+	 // 2 = Half word with signed extension
+	 // 3 = Byte with unsigned extension
+	 // 4 = Half word with unsigned extension
 	
 	initial
 	begin
@@ -42,6 +49,7 @@ module control_mux(
 	 MemWrite_out = 0;
 	 Branch_out = 0;
 	 ALUOp_out = 0;
+	 trunk_mode_out = 0;
 	end	
 		
 	always @*
@@ -61,6 +69,7 @@ module control_mux(
 					MemWrite_out = 0;
 					RegWrite_out = 0;
 					MemToReg_out = 0;
+					trunk_mode_out = 0;
 				end
 				
 				else if(formato == 6'b001001) //Instrucción JALR
@@ -73,18 +82,7 @@ module control_mux(
 					MemWrite_out = 0;
 					RegWrite_out = 0;
 					MemToReg_out = 0;
-				end
-				
-				else if(formato == 6'b000000) //Instrucción NOP
-				begin
-					RegDst_out = 0;
-					ALUOp_out = 2'b00;
-					ALUSrc_out = 0;
-					Branch_out = 0;
-					MemRead_out = 0;
-					MemWrite_out = 0;
-					RegWrite_out = 0;
-					MemToReg_out = 0;
+					trunk_mode_out = 0;
 				end
 				
 				else //Alguna instrucción matemática, tipo R.
@@ -97,6 +95,7 @@ module control_mux(
 					MemWrite_out = 0;
 					RegWrite_out = 1;
 					MemToReg_out = 0;
+					trunk_mode_out = 0;
 				end
 			end
 			
@@ -111,6 +110,7 @@ module control_mux(
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 1;
+				trunk_mode_out = 1;
 			end
 			
 			//Instrucción LH
@@ -124,6 +124,7 @@ module control_mux(
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 1;
+				trunk_mode_out = 2;
 			end
 			
 			//Instrucción LW
@@ -137,6 +138,49 @@ module control_mux(
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 1;
+				trunk_mode_out = 0;
+			end
+
+			//Instrucción LWU
+			6'b100111:
+			begin
+				RegDst_out = 0;
+				ALUOp_out = 2'b00;
+				ALUSrc_out = 1;
+				Branch_out = 0;
+				MemRead_out = 1;
+				MemWrite_out = 0;
+				RegWrite_out = 1;
+				MemToReg_out = 1;
+				trunk_mode_out = 0;
+			end
+			
+			//Instrucción LBU
+			6'b100100: 
+			begin
+				RegDst_out = 0;
+				ALUOp_out = 2'b00;
+				ALUSrc_out = 1;
+				Branch_out = 0;
+				MemRead_out = 1;
+				MemWrite_out = 0;
+				RegWrite_out = 1;
+				MemToReg_out = 1;
+				trunk_mode_out = 3;
+			end
+			
+			//Instrucción LHU
+			6'b100101:
+			begin
+				RegDst_out = 0;
+				ALUOp_out = 2'b00;
+				ALUSrc_out = 1;
+				Branch_out = 0;
+				MemRead_out = 1;
+				MemWrite_out = 0;
+				RegWrite_out = 1;
+				MemToReg_out = 1;
+				trunk_mode_out = 4;
 			end
 			
 			//Instrucción SB
@@ -150,6 +194,7 @@ module control_mux(
 				MemWrite_out = 1;
 				RegWrite_out = 0;
 				MemToReg_out = 0;
+				trunk_mode_out = 3;
 			end
 
 			//Instrucción SH
@@ -163,6 +208,7 @@ module control_mux(
 				MemWrite_out = 1;
 				RegWrite_out = 0;
 				MemToReg_out = 0;
+				trunk_mode_out = 4;
 			end		
 			
 			//Instrucción SW
@@ -176,71 +222,119 @@ module control_mux(
 				MemWrite_out = 1;
 				RegWrite_out = 0;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción ADDI
 			6'b001000:
 			begin
 				RegDst_out = 0;
-				ALUOp_out = 2'b11;
+				ALUOp_out = 2'b10;
 				ALUSrc_out = 1;
 				Branch_out = 0;
 				MemRead_out = 0;
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
+			end
+			
+			//Instrucción ADDIU
+			6'b001001:
+			begin
+				RegDst_out = 0;
+				ALUOp_out = 2'b10;
+				ALUSrc_out = 1;
+				Branch_out = 0;
+				MemRead_out = 0;
+				MemWrite_out = 0;
+				RegWrite_out = 1;
+				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción ANDI
 			6'b001100:
 			begin
 				RegDst_out = 0;
-				ALUOp_out = 2'b11;
+				ALUOp_out = 2'b10;
 				ALUSrc_out = 1;
 				Branch_out = 0;
 				MemRead_out = 0;
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción ORI
 			6'b001101:
 			begin
 				RegDst_out = 0;
-				ALUOp_out = 2'b11;
+				ALUOp_out = 2'b10;
 				ALUSrc_out = 1;
 				Branch_out = 0;
 				MemRead_out = 0;
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción XORI
 			6'b001110:
 			begin
 				RegDst_out = 0;
-				ALUOp_out = 2'b11;
+				ALUOp_out = 2'b10;
 				ALUSrc_out = 1;
 				Branch_out = 0;
 				MemRead_out = 0;
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
+			end
+			
+			//Instrucción LUI
+			6'b001111:
+			begin
+				RegDst_out = 0;
+				ALUOp_out = 2'b10;
+				ALUSrc_out = 1;
+				Branch_out = 0;
+				MemRead_out = 0;
+				MemWrite_out = 0;
+				RegWrite_out = 1;
+				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción SLTI
 			6'b001010:
 			begin
 				RegDst_out = 0;
-				ALUOp_out = 2'b11;
+				ALUOp_out = 2'b10;
 				ALUSrc_out = 1;
 				Branch_out = 0;
 				MemRead_out = 0;
 				MemWrite_out = 0;
 				RegWrite_out = 1;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
+			end
+			
+			//Instrucción SLTIU
+			6'b001011:
+			begin
+				RegDst_out = 0;
+				ALUOp_out = 2'b10;
+				ALUSrc_out = 1;
+				Branch_out = 0;
+				MemRead_out = 0;
+				MemWrite_out = 0;
+				RegWrite_out = 1;
+				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción BEQ
@@ -254,6 +348,7 @@ module control_mux(
 				MemWrite_out = 0;
 				RegWrite_out = 0;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción BNEQ
@@ -267,6 +362,7 @@ module control_mux(
 				MemWrite_out = 0;
 				RegWrite_out = 0;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Instrucción J
@@ -280,6 +376,7 @@ module control_mux(
 				MemWrite_out = 0;
 				RegWrite_out = 0;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 			//Cargo un NOP
@@ -293,6 +390,7 @@ module control_mux(
 				MemWrite_out = 0;
 				RegWrite_out = 0;
 				MemToReg_out = 0;
+				trunk_mode_out = 0;
 			end
 			
 		 endcase
@@ -308,6 +406,7 @@ module control_mux(
 		MemWrite_out = 0;
 		Branch_out = 0;
 		ALUOp_out = 0;
+		trunk_mode_out = 0;
    end
 end
 

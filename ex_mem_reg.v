@@ -31,6 +31,7 @@ module ex_mem_reg(
 	 input MemRead_in,
 	 input MemWrite_in,
 	 input Branch_in,
+	 input [2:0] trunk_mode_in,
 	 
 	 output [31:0] result_out,
 	 output [31:0] registro_2_out,
@@ -42,7 +43,8 @@ module ex_mem_reg(
 	 output reg RegWrite_out,
 	 output reg MemRead_out,
 	 output reg MemWrite_out,
-	 output reg Branch_out
+	 output reg Branch_out,
+	 output reg [2:0] trunk_mode_out
 	 );
 	
 	initial
@@ -52,6 +54,7 @@ module ex_mem_reg(
 	 MemRead_out = 0;
 	 MemWrite_out = 0;
 	 Branch_out = 0;
+	 trunk_mode_out = 0;
 	end
 	
 	reg  [31:0] out_res = 0;
@@ -73,6 +76,7 @@ module ex_mem_reg(
 		MemRead_out = MemRead_in;
 		MemWrite_out = MemWrite_in;
 		Branch_out = Branch_in;
+		trunk_mode_out = trunk_mode_in;
 	end
 	
 	assign result_out = out_res;

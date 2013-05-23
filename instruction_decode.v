@@ -44,7 +44,8 @@ module instruction_decode(
 	 output MemWrite_out,
 	 output Branch_out,
 	 output [1:0] ALUOp_out,
-	 
+	 output [2:0] trunk_mode_out,
+	 output [5:0] op_code_out,
 	 
 	 //Registers to UART
 	 output [31:0] register_0_id_out,
@@ -101,6 +102,7 @@ module instruction_decode(
 	 wire MemWrite_in;
 	 wire Branch_in;
 	 wire [1:0] ALUOp_in;
+	 wire [2:0] trunk_mode_in;
 	 
 	 control_mux u_control_mux (
 		 .op_code(instruction[31:26]),
@@ -113,7 +115,8 @@ module instruction_decode(
 		 .MemRead_out(MemRead_in), 
 		 .MemWrite_out(MemWrite_in), 
 		 .Branch_out(Branch_in), 
-		 .ALUOp_out(ALUOp_in)
+		 .ALUOp_out(ALUOp_in),
+		 .trunk_mode_out(trunk_mode_in)
     );
 	 
 	 registers u_registers (
@@ -201,7 +204,9 @@ module instruction_decode(
 		 .MemRead_in(MemRead_in), 
 		 .MemWrite_in(MemWrite_in), 
 		 .Branch_in(Branch_in), 
-		 .ALUOp_in(ALUOp_in), 
+		 .ALUOp_in(ALUOp_in),
+		 .trunk_mode_in(trunk_mode_in),
+		 .op_code_in(instruction[31:26]),
 		  //Control Signals Output
 		 .RegDst_out(RegDst_out), 
 		 .ALUSrc_out(ALUSrc_out), 
@@ -210,7 +215,9 @@ module instruction_decode(
 		 .MemRead_out(MemRead_out), 
 		 .MemWrite_out(MemWrite_out), 
 		 .Branch_out(Branch_out), 
-		 .ALUOp_out(ALUOp_out)
+		 .ALUOp_out(ALUOp_out),
+		 .trunk_mode_out(trunk_mode_out),
+		 .op_code_out(op_code_out)
     );
 
 endmodule

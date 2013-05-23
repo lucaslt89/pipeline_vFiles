@@ -37,6 +37,8 @@ module id_ex(
 	 input MemWrite_in,
 	 input Branch_in,
 	 input [1:0] ALUOp_in,
+	 input [2:0] trunk_mode_in,
+	 input [5:0] op_code_in,
 	 
     output reg [31:0] data_a_out,
     output reg [31:0] data_b_out,
@@ -55,9 +57,9 @@ module id_ex(
 	 output reg MemRead_out,
 	 output reg MemWrite_out,
 	 output reg Branch_out,
-	 output reg [1:0] ALUOp_out
-	 
-
+	 output reg [1:0] ALUOp_out,
+	 output reg [2:0] trunk_mode_out,
+	 output reg [5:0] op_code_out
     );
 	 
 	initial
@@ -69,6 +71,7 @@ module id_ex(
 	 reg_dest_r_type_out = 0;
 	 reg_dest_l_type_out = 0;
 	 reg_dest_s_type_out = 0;
+	 sa_out = 0;
 	 RegDst_out = 0;
 	 ALUSrc_out = 0;
 	 MemToReg_out = 0;
@@ -77,6 +80,8 @@ module id_ex(
 	 MemWrite_out = 0;
 	 Branch_out = 0;
 	 ALUOp_out = 0;
+	 trunk_mode_out = 0;
+	 op_code_out = 0;
 	end
 
 
@@ -98,6 +103,8 @@ module id_ex(
 		MemWrite_out = MemWrite_in;
 		Branch_out = Branch_in;
 		ALUOp_out = ALUOp_in;
+		trunk_mode_out = trunk_mode_in;
+		op_code_out = op_code_in;
 	end
 
 endmodule
