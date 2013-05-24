@@ -28,7 +28,7 @@ module adder(
 	
 	always @*
 	begin
-		aux = old_pc + offset;
+		aux = old_pc + offset - 1'b1;
 	end
 
 	assign new_pc = aux[10:0];

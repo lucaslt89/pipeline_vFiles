@@ -24,6 +24,7 @@ module instruction_fetch(
 	 input PCSrc, 			//selector del mux
 	 input PCWrite,
 	 input IF_ID_Write,
+	 input IF_Flush,
     output [10:0] pc, 
     output [31:0] instruccion,
 	 output [7:0] current_pc_debug
@@ -66,6 +67,7 @@ if_id_reg u_if_id_reg (
     .pc(pc_incrementado), 
     .clock(clock),
 	 .IF_ID_Write(IF_ID_Write),
+	 .IF_Flush(IF_Flush),
     .salida_inst(instruccion), 
     .salida_pc(pc)
     );

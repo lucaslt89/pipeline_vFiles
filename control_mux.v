@@ -1,21 +1,21 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    19:11:47 03/03/2013 
-// Design Name: 
-// Module Name:    control_mux 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
+// Company:
+// Engineer:
 //
-// Dependencies: 
+// Create Date:    19:11:47 03/03/2013
+// Design Name:
+// Module Name:    control_mux
+// Project Name:
+// Target Devices:
+// Tool versions:
+// Description:
 //
-// Revision: 
+// Dependencies:
+//
+// Revision:
 // Revision 0.01 - File Created
-// Additional Comments: 
+// Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
 module control_mux(
@@ -30,7 +30,10 @@ module control_mux(
 	 output reg MemWrite_out,
 	 output reg Branch_out,
 	 output reg [1:0] ALUOp_out,
-	 output reg [2:0] trunk_mode_out
+	 output reg [2:0] trunk_mode_out,
+	 output reg Bne_out,
+	 output reg Jump,
+	 output reg [1:0] Jdes_sel
     );
 	 //Trunk mode:
 	 // 0 = Normal result
@@ -38,7 +41,7 @@ module control_mux(
 	 // 2 = Half word with signed extension
 	 // 3 = Byte with unsigned extension
 	 // 4 = Half word with unsigned extension
-	
+
 	initial
 	begin
 	 RegDst_out = 0;
@@ -50,15 +53,19 @@ module control_mux(
 	 Branch_out = 0;
 	 ALUOp_out = 0;
 	 trunk_mode_out = 0;
-	end	
-		
+	 Bne_out = 0;
+	 Jump = 0;
+	 Jdes_sel = 0;
+	end
+
 	always @*
 	begin
 		if(stall_mux)
-		begin 
+		begin
 		 case(op_code)
 			//Tipo R o Salto
-			6'b000000: begin
+			6'b000000:
+			begin
 				if(formato == 6'b001000) //Instrucción JR
 				begin
 					RegDst_out = 0;
@@ -70,21 +77,28 @@ module control_mux(
 					RegWrite_out = 0;
 					MemToReg_out = 0;
 					trunk_mode_out = 0;
+					Bne_out = 0;
+					Jump = 1;
+					Jdes_sel = 2'b10;
 				end
-				
+
 				else if(formato == 6'b001001) //Instrucción JALR
 				begin
-					RegDst_out = 0;
-					ALUOp_out = 2'b00;
+					RegDst_out = 1;
+					ALUOp_out = 2'b10;
 					ALUSrc_out = 0;
 					Branch_out = 1;
 					MemRead_out = 0;
 					MemWrite_out = 0;
-					RegWrite_out = 0;
+					RegWrite_out = 1;
 					MemToReg_out = 0;
 					trunk_mode_out = 0;
+					Bne_out = 0;
+					Jump = 1;
+					Jdes_sel = 2'b10;
 				end
-				
+
+
 				else //Alguna instrucción matemática, tipo R.
 				begin
 					RegDst_out = 1;
@@ -96,11 +110,14 @@ module control_mux(
 					RegWrite_out = 1;
 					MemToReg_out = 0;
 					trunk_mode_out = 0;
+					Bne_out = 0;
+					Jump = 0;
+					Jdes_sel = 2'b00;
 				end
 			end
-			
+
 			//Instrucción LB
-			6'b100000: 
+			6'b100000:
 			begin
 				RegDst_out = 0;
 				ALUOp_out = 2'b00;
@@ -111,8 +128,11 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 1;
 				trunk_mode_out = 1;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción LH
 			6'b100001:
 			begin
@@ -125,8 +145,11 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 1;
 				trunk_mode_out = 2;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción LW
 			6'b100011:
 			begin
@@ -139,9 +162,12 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 1;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+                Jump = 0;
+                Jdes_sel = 0;
 			end
 
-			//Instrucción LWU
+			//Instrucciï¿½n LWU
 			6'b100111:
 			begin
 				RegDst_out = 0;
@@ -153,10 +179,13 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 1;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+                Jump = 0;
+                Jdes_sel = 0;
 			end
-			
-			//Instrucción LBU
-			6'b100100: 
+
+			//Instrucciï¿½n LBU
+			6'b100100:
 			begin
 				RegDst_out = 0;
 				ALUOp_out = 2'b00;
@@ -167,9 +196,12 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 1;
 				trunk_mode_out = 3;
+				Bne_out = 0;
+                Jump = 0;
+                Jdes_sel = 0;
 			end
-			
-			//Instrucción LHU
+
+			//Instrucciï¿½n LHU
 			6'b100101:
 			begin
 				RegDst_out = 0;
@@ -181,8 +213,11 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 1;
 				trunk_mode_out = 4;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción SB
 			6'b101000:
 			begin
@@ -195,6 +230,9 @@ module control_mux(
 				RegWrite_out = 0;
 				MemToReg_out = 0;
 				trunk_mode_out = 3;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
 
 			//Instrucción SH
@@ -209,8 +247,11 @@ module control_mux(
 				RegWrite_out = 0;
 				MemToReg_out = 0;
 				trunk_mode_out = 4;
-			end		
-			
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
+			end
+
 			//Instrucción SW
 			6'b101011:
 			begin
@@ -223,8 +264,11 @@ module control_mux(
 				RegWrite_out = 0;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción ADDI
 			6'b001000:
 			begin
@@ -237,9 +281,12 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+                Jump = 0;
+                Jdes_sel = 0;
 			end
-			
-			//Instrucción ADDIU
+
+			//Instrucciï¿½n ADDIU
 			6'b001001:
 			begin
 				RegDst_out = 0;
@@ -251,8 +298,11 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción ANDI
 			6'b001100:
 			begin
@@ -265,8 +315,11 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción ORI
 			6'b001101:
 			begin
@@ -279,8 +332,11 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción XORI
 			6'b001110:
 			begin
@@ -293,9 +349,12 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+                Jump = 0;
+                Jdes_sel = 0;
 			end
-			
-			//Instrucción LUI
+
+			//Instrucciï¿½n LUI
 			6'b001111:
 			begin
 				RegDst_out = 0;
@@ -307,8 +366,11 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción SLTI
 			6'b001010:
 			begin
@@ -321,9 +383,12 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+                Jump = 0;
+                Jdes_sel = 0;
 			end
-			
-			//Instrucción SLTIU
+
+			//Instrucciï¿½n SLTIU
 			6'b001011:
 			begin
 				RegDst_out = 0;
@@ -335,13 +400,16 @@ module control_mux(
 				RegWrite_out = 1;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción BEQ
 			6'b000100:
 			begin
 				RegDst_out = 0;
-				ALUOp_out = 2'b00;
+				ALUOp_out = 2'b01;
 				ALUSrc_out = 0;
 				Branch_out = 1;
 				MemRead_out = 0;
@@ -349,13 +417,16 @@ module control_mux(
 				RegWrite_out = 0;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción BNEQ
 			6'b000101:
 			begin
 				RegDst_out = 0;
-				ALUOp_out = 2'b00;
+				ALUOp_out = 2'b01;
 				ALUSrc_out = 0;
 				Branch_out = 1;
 				MemRead_out = 0;
@@ -363,8 +434,11 @@ module control_mux(
 				RegWrite_out = 0;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 1;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 			//Instrucción J
 			6'b000010:
 			begin
@@ -377,8 +451,27 @@ module control_mux(
 				RegWrite_out = 0;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 1;
+				Jdes_sel = 2'b01;
 			end
-			
+
+			//Instrucción JAL
+			6'b000011:
+			begin
+				RegDst_out = 1;
+				ALUOp_out = 2'b11;
+				ALUSrc_out = 0;
+				Branch_out = 1;
+				MemRead_out = 0;
+				MemWrite_out = 0;
+				RegWrite_out = 1;
+				MemToReg_out = 0;
+				Bne_out = 0;
+				Jump = 1;
+				Jdes_sel = 2'b01;
+			end
+
 			//Cargo un NOP
 			default:
 			begin
@@ -391,11 +484,14 @@ module control_mux(
 				RegWrite_out = 0;
 				MemToReg_out = 0;
 				trunk_mode_out = 0;
+				Bne_out = 0;
+				Jump = 0;
+				Jdes_sel = 2'b00;
 			end
-			
+
 		 endcase
 	end
-	
+
 	else
 	begin
 		RegDst_out = 0;
@@ -407,6 +503,9 @@ module control_mux(
 		Branch_out = 0;
 		ALUOp_out = 0;
 		trunk_mode_out = 0;
+		Bne_out = 0;
+		Jump = 0;
+		Jdes_sel = 2'b00;
    end
 end
 

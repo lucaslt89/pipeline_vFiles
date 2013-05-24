@@ -23,20 +23,31 @@ module hazard_detection_unit(
     input [4:0] ID_EX_RegisterRt,
 	 input [4:0] IF_ID_RegisterRt,
 	 input [4:0] IF_ID_RegisterRs,
+	 input PCSrc,
     output reg PCWrite,				//PCWrite
     output reg IF_ID_Write,		//IF_ID_Write
-    output reg stall_mux			//stall_mux
-    );
+    output reg stall_mux,			//stall_mux
+    output reg IF_Flush				//IF_Flush
+	 );
 
 always@*
 begin
-	if(ID_EX_MemRead
+	if(PCSrc)
+	begin
+		PCWrite = 1;
+		IF_ID_Write = 1;
+		stall_mux=0;
+		IF_Flush = 1;
+	end
+	
+	else if(ID_EX_MemRead
 	& ((ID_EX_RegisterRt == IF_ID_RegisterRs)
 		| (ID_EX_RegisterRt == IF_ID_RegisterRt)))
 	begin
 		PCWrite = 0;
 		IF_ID_Write = 0;
-		stall_mux=0;
+		stall_mux = 0;
+		IF_Flush  = 0;
 	end
 	
 	else
@@ -44,8 +55,9 @@ begin
 		PCWrite = 1;
 		IF_ID_Write = 1;
 		stall_mux = 1;
-	end
-		
+		IF_Flush = 0;
+	end	
+	
 end
 
 endmodule
