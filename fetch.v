@@ -56,11 +56,17 @@ sumador u_sumador (
     .pc_incrementado(pc_incrementado)
     );
 	 
-inst_mem u_inst_mem (
+/*inst_mem u_inst_mem (
     .addr(pc_actual), 
     .clock(clock), 
     .inst(salida_mem)
-    );
+    );*/
+	 
+instruction_memory u_inst_mem (
+  .clka(clock), // input clka
+  .addra(pc_actual), // input [10 : 0] addra
+  .douta(salida_mem) // output [31 : 0] douta
+);
 	 
 if_id_reg u_if_id_reg (
     .instruccion(salida_mem), 

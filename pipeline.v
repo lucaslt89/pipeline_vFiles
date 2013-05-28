@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module pipeline(
-		input pipeline_clock,
+		input clock,
 		input rx,
 		output tx,
 
@@ -29,7 +29,7 @@ module pipeline(
 		output [7:0] leds
     );
 
-	 //wire pipeline_clock;
+	 wire pipeline_clock;
 
 	 //************* IF *************
 	 //Entradas
@@ -337,11 +337,11 @@ module pipeline(
 	 wire fifo_empty;
 
 	 uart debug_unit (
-		.clk(pipeline_clock),
+		.clk(clock),
 		.rx(rx),
 		.rx_empty(fifo_empty),
 		.tx(tx),
-		//.clock_status(pipeline_clock),
+		.clock_status(pipeline_clock),
 		.rx_data_out_debug(leds),
 
 		//Debug signals for IF.
@@ -350,6 +350,7 @@ module pipeline(
 		.instruccion_if_out(instruccion_IF_out),
 
 		//Debugging signals for ID
+		.sa_id_out(sa_ID_out),
 		.register_0_id_out(register_0_id_out),
 		.register_1_id_out(register_1_id_out),
 		.register_2_id_out(register_2_id_out),
@@ -396,7 +397,12 @@ module pipeline(
 		.MemWrite_id_out(MemWrite_ID_out),
 		.Branch_id_out(Branch_ID_out),
 		.ALUOp_id_out(ALUOp_ID_out),
-
+		.Bne_id_out(Bne_ID_out),
+		.Jump_id_out(Jump_ID_out),
+		.sel_dire_salto(sel_dire_salto),
+		.op_code_id_out(op_code_ID_out),
+		.trunk_mode_id_out(trunk_mode_ID_out),
+	
 		//Debugging signals for IE
 		.result_ie_out(result_EX_out),
 		.registro_2_ie_out(registro_2_EX_out),
@@ -407,6 +413,7 @@ module pipeline(
 		.RegWrite_ie_out(RegWrite_EX_out),
 		.MemRead_ie_out(MemRead_EX_out),
 		.MemWrite_ie_out(MemWrite_EX_out),
+		.trunk_mode_ie_out(trunk_mode_EX_out),
 //		.Branch_ie_out(Branch_EX_out),				//No existe más
 
 		//Debugging signals for MEM

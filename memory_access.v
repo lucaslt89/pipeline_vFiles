@@ -56,14 +56,21 @@ trunk_unit u_trunk_unit_mem_data (
      .trunked_value(trunked_mem_readed_data)
 	 );
 	 
-data_mem u_data_mem (
+/*data_mem u_data_mem (
     .clock(clock), 
     .address(alu_result[10:0]), 
     .in_data(trunked_in_data),
     .MemWrite(MemWrite), 
 	 .MemRead(MemRead),
     .out_data(mem_out)
-    );
+    );*/
+data_memory u_data_mem (
+  .clka(clock), // input clka
+  .wea(MemWrite), // input [0 : 0] wea
+  .addra(alu_result[10:0]), // input [10 : 0] addra
+  .dina(trunked_in_data), // input [31 : 0] dina
+  .douta(mem_out) // output [31 : 0] douta
+);
 
 mem_wb_reg u_mem_wb_reg (
     .mem_data_in(trunked_mem_readed_data),

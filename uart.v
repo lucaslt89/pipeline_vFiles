@@ -19,6 +19,7 @@ module uart
 	 input [31:0] instruccion_if_out,
 	 
 	 //Debugging signals for ID
+	 input [4:0] sa_id_out,
 	 input [31:0] register_0_id_out,
 	 input [31:0] register_1_id_out,
 	 input [31:0] register_2_id_out,
@@ -66,6 +67,11 @@ module uart
 	 input MemWrite_id_out,
 	 input Branch_id_out,
 	 input [1:0] ALUOp_id_out,
+	 input Bne_id_out,
+	 input Jump_id_out,
+    input [1:0]sel_dire_salto,
+    input [5:0]op_code_id_out,
+    input [2:0] trunk_mode_id_out,
 	 
 	 //Debugging signals for IE
 	 input [31:0] result_ie_out,
@@ -79,6 +85,7 @@ module uart
 	 input MemRead_ie_out,
 	 input MemWrite_ie_out,
 	 input Branch_ie_out,
+	 input [2:0] trunk_mode_ie_out,
 	 
 	 //Debugging signals for MEM
 	 input [31:0] mem_data_mem_out,
@@ -154,6 +161,7 @@ module uart
 	 .instruccion_if_out(instruccion_if_out),
 	 
 	 //Debugging signals for ID
+	 .sa_id_out(sa_id_out),
 	 .register_0_id_out(register_0_id_out), 
     .register_1_id_out(register_1_id_out), 
     .register_2_id_out(register_2_id_out), 
@@ -200,6 +208,11 @@ module uart
     .MemWrite_id_out(MemWrite_id_out), 
     .Branch_id_out(Branch_id_out), 
     .ALUOp_id_out(ALUOp_id_out),
+	 .Bne_id_out(Bne_id_out),
+	 .Jump_id_out(Jump_id_out),
+    .sel_dire_salto(sel_dire_salto),
+    .op_code_id_out(op_code_id_out),
+    .trunk_mode_id_out(trunk_mode_id_out),
 	 
 	 //Debugging signals for IE
     .result_ie_out(result_ie_out), 
@@ -212,6 +225,7 @@ module uart
     .MemRead_ie_out(MemRead_ie_out), 
     .MemWrite_ie_out(MemWrite_ie_out), 
     .Branch_ie_out(Branch_ie_out),
+	 .trunk_mode_ie_out(trunk_mode_ie_out),
 	 
 	 //Debugging signals for MEM
     .mem_data_mem_out(mem_data_mem_out), 

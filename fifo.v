@@ -13,6 +13,7 @@ module fifo
 	 input [31:0] instruccion_if_out,
 	  
 	  //Debugging signals for ID
+	 input [4:0] sa_id_out,
 	 input [31:0] register_0_id_out,
 	 input [31:0] register_1_id_out,
 	 input [31:0] register_2_id_out,
@@ -60,6 +61,11 @@ module fifo
 	 input MemWrite_id_out,
 	 input Branch_id_out,
 	 input [1:0] ALUOp_id_out,
+	 input Bne_id_out,
+	 input Jump_id_out,
+    input [1:0]sel_dire_salto,
+    input [5:0]op_code_id_out,
+    input [2:0] trunk_mode_id_out,
 	 
 	  //Debugging signals for IE
 	 input [31:0] result_ie_out,
@@ -73,6 +79,7 @@ module fifo
 	 input MemRead_ie_out,
 	 input MemWrite_ie_out,
 	 input Branch_ie_out,
+	 input [2:0] trunk_mode_ie_out,
 	 
 	  //Debugging signals for MEM
 	 input [31:0] mem_data_mem_out,
@@ -83,7 +90,7 @@ module fifo
 	 input RegWrite_mem_out
   );
 
-  reg [B-1:0] array_reg [183:0];
+  reg [B-1:0] array_reg [190:0];
   reg [7:0] w_ptr_reg, w_ptr_next, w_ptr_succ;
   reg [7:0] r_ptr_reg, r_ptr_next, r_ptr_succ;
   reg full_reg, empty_reg, full_next, empty_next;
@@ -326,6 +333,17 @@ module fifo
 		
 			array_reg[182] = 8'b00000001 & MemToReg_mem_out; //Bit de control MemToReg que sale de la etapa MEM
 			array_reg[183] = 8'b00000001 & RegWrite_mem_out; //Bit de control RegWrite que sale de la etapa MEM
+			
+			//**********LAST SIGNALS ADDED*************
+			array_reg[184] = 8'b00011111 & sa_id_out; //Sa saliendo del registro de ID.
+			array_reg[185] = 8'b00000001 & Bne_id_out;
+			array_reg[186] = 8'b00000001 & Jump_id_out;
+			array_reg[187] = 8'b00000011 & sel_dire_salto;
+			array_reg[188] = 8'b00111111 & op_code_id_out;
+			array_reg[189] = 8'b00000111 & trunk_mode_id_out;
+			
+			array_reg[190] = 8'b00000111 & trunk_mode_ie_out;
+			
 	  end	
 
   assign r_data = array_reg[r_ptr_reg];
